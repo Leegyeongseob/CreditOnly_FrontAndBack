@@ -5,11 +5,12 @@ import styled from "styled-components";
 import { FaSearch } from "react-icons/fa";
 import InformationAxios from "../../axiosapi/InformationAxios";
 import NewsForm from "./NewsForm";
+import useImageErrorHandler from "./useImage";
 
 const Container = styled.div`
   width: 99%;
   height: 94vh;
-  min-width:300px;
+  min-width: 300px;
 `;
 
 const TopBar = styled.div`
@@ -228,7 +229,7 @@ const AddNewsButton = styled.button`
   border: none;
   cursor: pointer;
   &:hover {
-    background-color: #666;;
+    background-color: #666;
   }
   @media screen and (max-width: 768px) {
     width: 80px;
@@ -253,7 +254,7 @@ const NewsList = ({ onSave, onCancel }) => {
   const [selectedCategory, setSelectedCategory] = useState(category || "전체");
   const [items, setItems] = useState([]);
   const itemsPerPage = 5;
-
+  const handleImageError = useImageErrorHandler();
   const { email, adminEmails = [] } = useContext(UserEmailContext);
   const isAdmin = adminEmails.includes(email);
   const [isCreating, setIsCreating] = useState(false);
@@ -404,7 +405,6 @@ const NewsList = ({ onSave, onCancel }) => {
         />
       ) : (
         <>
-          
           <ListWrap>
             {currentItems.length > 0 ? (
               currentItems.map((item, index) => (
@@ -414,7 +414,11 @@ const NewsList = ({ onSave, onCancel }) => {
                   style={{ textDecoration: "none", color: "inherit" }}
                 >
                   <ListGroup isLast={index === currentItems.length - 1}>
-                    <Simg alt={item.title} src={item.imageUrl} />
+                    <Simg
+                      alt={item.title}
+                      src={item.imageUrl}
+                      onError={(e) => handleImageError(e, item.id)}
+                    />
                     <ListDetailWrap>
                       <TextWrapper>{item.title}</TextWrapper>
                       <DetailWrap>{item.content}</DetailWrap>
@@ -442,12 +446,9 @@ const NewsList = ({ onSave, onCancel }) => {
             <Button onClick={handleSearch}>
               <Search />
             </Button>
-          
           </SearchContainer>
           {isAdmin && (
-          <AddNewsButton onClick={handleAddNewsClick}>
-            작성
-          </AddNewsButton>
+            <AddNewsButton onClick={handleAddNewsClick}>작성</AddNewsButton>
           )}
           <Pagination>
             <PageButton
@@ -484,7 +485,6 @@ const NewsList = ({ onSave, onCancel }) => {
               &gt;&gt;
             </PageButton>
           </Pagination>
-          
         </>
       )}
     </Container>

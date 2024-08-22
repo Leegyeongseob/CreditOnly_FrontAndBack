@@ -4,8 +4,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { FaPlus } from "react-icons/fa6";
 import InformationAxios from "../../axiosapi/InformationAxios";
-
 import Banner from "../banner/Banner";
+import useImageErrorHandler from "./useImage";
 
 const Container = styled.div`
   width: 100%;
@@ -240,6 +240,8 @@ const CreditInformation = () => {
   const [cardItems, setCardItems] = useState([]);
   const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
+  const handleImageError = useImageErrorHandler(); // 훅 사용
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -269,6 +271,7 @@ const CreditInformation = () => {
   if (loading) {
     return <div>Loading...</div>; // 로딩 중일 때 표시할 내용
   }
+
   return (
     <Container>
       <TopSide>
@@ -285,7 +288,11 @@ const CreditInformation = () => {
           <CardListWrapper>
             {informationItems.map((item) => (
               <CardList key={item.id} to={`/news/${item.id}`}>
-                <Limg alt={item.title} src={item.imageUrl} />
+                <Limg
+                  alt={item.title}
+                  src={item.imageUrl}
+                  onError={(e) => handleImageError(e, item.id)}
+                />
                 <InformationText>{item.title}</InformationText>
               </CardList>
             ))}
@@ -303,7 +310,11 @@ const CreditInformation = () => {
           <ListWrapper>
             {appItems.map((item) => (
               <ListGroup key={item.id} to={`/news/${item.id}`}>
-                <Simg alt={item.title} src={item.imageUrl} />
+                <Simg
+                  alt={item.title}
+                  src={item.imageUrl}
+                  onError={(e) => handleImageError(e, item.id)}
+                />
                 <ListDetailWrap>
                   <TextWrapper>{item.title}</TextWrapper>
                   <DetailWrap>{item.content}</DetailWrap>
@@ -322,7 +333,11 @@ const CreditInformation = () => {
           <ListWrapper>
             {cardItems.map((item) => (
               <ListGroup key={item.id} to={`/news/${item.id}`}>
-                <Simg alt={item.title} src={item.imageUrl} />
+                <Simg
+                  alt={item.title}
+                  src={item.imageUrl}
+                  onError={(e) => handleImageError(e, item.id)}
+                />
                 <ListDetailWrap>
                   <TextWrapper>{item.title}</TextWrapper>
                   <DetailWrap>{item.content}</DetailWrap>

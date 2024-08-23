@@ -527,8 +527,10 @@ const SignUp = () => {
   const [isCode, setIsCode] = useState(false);
   //이메일 보낸 후 상태 저장.
   const [isEmailSent, setIsEmailSent] = useState(false);
+  // 비교할 인증코드
+  const [certificationCode, setCertificationCode] = useState("");
   //인증코드 저장
-  const [saveCertificationCode, setSaveCertificationCode] = useState(null);
+  const [inputCertificationCode, setInputCertificationCode] = useState(null);
   //인증 확인 상태
   const [isEmail, setIsEmail] = useState(false);
   // 에러 메세지
@@ -771,6 +773,13 @@ const SignUp = () => {
       setModalContent("계정이 없습니다.");
     }
   };
+  // 인증 코드 입력 처리 함수 수정
+  const handleCertificationCodeInput = (e) => {
+    const value = e.target.value.replace(/[^0-9]/g, "");
+    if (value.length <= 6) {
+      setInputCertificationCode(value);
+    }
+  };
   // 회원가입 버튼을 클릭했을 경우 함수
   const signupBtnOnclickHandler = () => {
     if (
@@ -794,14 +803,16 @@ const SignUp = () => {
   };
   // 이메일 전송시 파라미터 넘기는 함수
   const sendVerificationEmail = async (toEmail) => {
-    const certificationCode = Math.floor(Math.random() * 900000) + 100000; // 100000부터 999999까지의 난수 발생
-    setSaveCertificationCode(certificationCode);
+    const generatedCode = Math.floor(
+      100000 + Math.random() * 900000
+    ).toString();
+    setCertificationCode(generatedCode);
     // 이메일 보내기
     // 여기서 정의해야 하는 것은 위에서 만든 메일 템플릿에 지정한 변수({{ }})에 대한 값을 담아줘야 한다.
     const templateParams = {
       toEmail: toEmail, // 수신 이메일
       toName: "고객님",
-      certificationCode: certificationCode,
+      certificationCode: generatedCode,
     };
     try {
       const response = await emailjs.send(
@@ -825,10 +836,17 @@ const SignUp = () => {
   };
   // 코드 확인 버튼 이벤트
   const emailCertificationCodeOnClick = () => {
-    SetHeaderContents("인증코드확인");
-    setModalOpen(true);
-    setModalContent("확인되었습니다.");
-    setIsCode(true);
+    if (inputCertificationCode === certificationCode) {
+      SetHeaderContents("인증코드확인");
+      setModalOpen(true);
+      setModalContent("확인되었습니다.");
+      setIsCode(true);
+    } else {
+      SetHeaderContents("인증코드확인");
+      setModalOpen(true);
+      setModalContent("인증코드가 다릅니다.");
+      setIsCode(false);
+    }
   };
   //코드 모달 확인
   const codeModalOkBtnHandler = () => {
@@ -880,11 +898,10 @@ const SignUp = () => {
                   <InputDetailDiv>
                     <input
                       className="InputCode"
+                      maxLength={6}
                       // value={saveCertificationCode}
                       placeholder="Email Code"
-                      onChange={(e) => {
-                        setSaveCertificationCode(e.target.value);
-                      }}
+                      onChange={handleCertificationCodeInput}
                     />
                     <Empty></Empty>
                     <EmailAthouized

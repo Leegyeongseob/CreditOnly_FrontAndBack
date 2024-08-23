@@ -20,7 +20,6 @@ const SimpleLoginAxios = {
         }
       );
 
-      console.log("Token response:", response.data);
       return response.data;
     } catch (error) {
       console.error("Error fetching Kakao token:", error);

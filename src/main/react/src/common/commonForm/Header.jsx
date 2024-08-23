@@ -5,7 +5,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { BsMoonStars, BsSunFill } from "react-icons/bs";
 import { IoMenuOutline } from "react-icons/io5";
 import UserToggle from "./UserToggle";
-import { useContext, useEffect, useState, useCallback } from "react";
+import { useContext, useEffect, useState, useCallback, useRef } from "react";
 import SettingAxios from "../../axiosapi/SettingAxios";
 import { UserEmailContext } from "../../contextapi/UserEmailProvider";
 import MainAxios from "../../axiosapi/MainAxios";
@@ -169,10 +169,11 @@ const SearchInput = styled.input.attrs({ type: "text" })`
 `;
 const SearchOutputDiv = styled.div`
   width: 40vw;
-  max-height: 30vh; // 최대 높이 설정
+  max-height: 38vh; // 최대 높이 설정
+  border: 1px solid darkgray;
   position: absolute; // 입력창을 가리지 않도록
   top: 100%; // 입력창의 바로 아래에 위치시킴
-  display: ${({ searchComplete }) => (searchComplete ? "flex" : "none")};
+  display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
@@ -410,6 +411,7 @@ const Header = ({
   const [searchComplete, setSearchComplete] = useState(false);
   const navigate = useNavigate();
 
+  const searchRef = useRef(null);
   // 카카오 프로필 사진 저장 비동기 함수
   const kakaoProfileImgAxios = useCallback(
     async (emailValue, imgUrlData) => {
@@ -495,6 +497,30 @@ const Header = ({
       console.error("Error fetching search data:", error);
     }
   };
+  // 내용을 15단어로 제한하고 말줄임표를 추가하는 함수
+  const truncateContent = (content) => {
+    const words = content.split(" ");
+    if (words.length > 15) {
+      return words.slice(0, 15).join(" ") + "...";
+    }
+    return content;
+  };
+  const handleClickOutside = useCallback((event) => {
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
+      setSearchComplete(false);
+    }
+  }, []);
+  useEffect(() => {
+    if (searchComplete) {
+      window.addEventListener("click", handleClickOutside);
+    } else {
+      window.removeEventListener("click", handleClickOutside);
+    }
+
+    return () => {
+      window.removeEventListener("click", handleClickOutside);
+    };
+  }, [searchComplete, handleClickOutside]);
 
   return (
     <HeaderContainer isOpen={isOpen}>
@@ -513,7 +539,7 @@ const Header = ({
         <LogoTitle to="/mainpage">신용만</LogoTitle>
       </LeftBox>
       <RightBox>
-        <SearchBox>
+        <SearchBox ref={searchRef}>
           <SearchInputDiv>
             <SearchInput
               placeholder="검색어를 입력해주세요."
@@ -521,44 +547,39 @@ const Header = ({
               onChange={(e) => setSearchTerm(e.target.value)}
               onKeyDown={handleKeyPress}
             />
-            <Searchlogo
-              src={logosearch}
-              onClick={() => {
-                handleSearch();
-              }}
-            />
+            <Searchlogo src={logosearch} onClick={handleSearch} />
           </SearchInputDiv>
-          <SearchOutputDiv searchComplete={searchComplete}>
-            {searchData.length > 0 ? (
-              searchData.map((item) => (
-                <SearchOutput
-                  result={true}
-                  key={item.id}
-                  onClick={() => {
-                    if (item.page === "information") {
-                      navigate(
-                        `/${item.page}/${item.classTitle}/${item.contents}`
-                      );
+          {searchComplete && (
+            <SearchOutputDiv>
+              {searchData.length > 0 ? (
+                searchData.map((item) => (
+                  <SearchOutput
+                    result={true}
+                    key={item.id}
+                    onClick={() => {
+                      if (item.page === "information") {
+                        navigate(`/news/${item.id}`);
+                      } else if (item.page === "announcement") {
+                        navigate(`/${item.page}/news`);
+                      } else {
+                        navigate(`/${item.page}`);
+                      }
                       setSearchComplete(false);
-                    } else if (item.page === "announcement") {
-                      navigate(`/${item.page}/news`);
-                      setSearchComplete(false);
-                    } else {
-                      navigate(`/${item.page}`);
-                      setSearchComplete(false);
-                    }
-                  }}
-                >
-                  <div className="title">{item.title}</div>
-                  <div className="contents">{item.contents}</div>
+                    }}
+                  >
+                    <div className="title">{item.title}</div>
+                    <div className="contents">
+                      {truncateContent(item.contents)}
+                    </div>
+                  </SearchOutput>
+                ))
+              ) : (
+                <SearchOutput result={false}>
+                  <div className="noResult">검색 결과가 없습니다.</div>
                 </SearchOutput>
-              ))
-            ) : (
-              <SearchOutput result={false}>
-                <div className="noResult">검색 결과가 없습니다.</div>
-              </SearchOutput>
-            )}
-          </SearchOutputDiv>
+              )}
+            </SearchOutputDiv>
+          )}
         </SearchBox>
         <ToggleBox>
           <Toggle onClick={toggleDarkMode}>

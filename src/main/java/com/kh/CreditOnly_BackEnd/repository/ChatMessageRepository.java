@@ -8,4 +8,6 @@ import java.util.List;
 
 public interface ChatMessageRepository extends JpaRepository<ChatMessageEntity, Long> {
     List<ChatMessageEntity> findByConversationOrderBySentAt(ChatConversationEntity conversation);
+
+    void deleteAllBySender(String email);
 }

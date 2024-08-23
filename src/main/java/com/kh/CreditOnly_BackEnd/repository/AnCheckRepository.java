@@ -17,4 +17,6 @@ public interface AnCheckRepository extends JpaRepository<AnCheckEntity, Long> {
     List<AnCheckEntity> findByAnnouncement_Id(Long announcementId);
 
     List<AnCheckEntity> findAllByMember(MemberEntity memberEntity);
+
+    void deleteAllByMember(MemberEntity memberEntity);
 }

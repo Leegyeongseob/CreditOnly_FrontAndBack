@@ -23,6 +23,10 @@ import DoughnutChartComponent from "../../chart/DoughnutChartComponent";
 import IsNotCreditEvaluationForm from "../evaluation/IsNotCreditEvaluationForm";
 import CreditGradeBarChart from "../../chart/CreditGradeBarChart";
 import InformationAxios from "../../axiosapi/InformationAxios";
+import img1 from "../../img/news/img1.jpg";
+import img2 from "../../img/news/img2.jpg";
+import img3 from "../../img/news/img3.jpg";
+import img4 from "../../img/news/img4.jpg";
 
 const Container = styled.div`
   width: 100%;
@@ -306,7 +310,7 @@ const CreditView = React.memo(({ isEditing, informationItems }) => (
   <CreditViewWrap>
     {isEditing ? (
       <>
-        <Overlay imageurl={Logo}>신용 정보</Overlay>{" "}
+        <Overlay imageurl={Logo}>신용 정보</Overlay>
         <CardListWrapper>
           {informationItems.map((item) => (
             <CardList key={item.id} to={`/news/${item.id}`}>
@@ -457,7 +461,8 @@ const createComponents = (
   id,
   isEditing,
   isCreditEvaluation,
-  informationItems
+  informationItems,
+  handleImageError
 ) => {
   const CenteredContainer = styled.div`
     display: flex;
@@ -549,6 +554,8 @@ const MainPage = () => {
   // contextApi에서 저장중인 email 불러오기
   const { isCreditEvaluation } = useContext(UserEmailContext);
   console.log("isCreditEvaluation : ", isCreditEvaluation);
+  // 이미지 매핑 객체 생성
+  const localImages = [img1, img2, img3, img4];
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -556,7 +563,12 @@ const MainPage = () => {
           "신용조회 정보모음"
         );
         console.log(infoData);
-        setInformationItems(infoData.slice(0, 4));
+        // infoData를 처리하는 부분
+        const processedInfoData = infoData.slice(0, 4).map((item, index) => ({
+          ...item,
+          imageUrl: localImages[index], // 기존 imageUrl을 로컬 이미지로 대체
+        }));
+        setInformationItems(processedInfoData);
       } catch (error) {
         console.error("데이터 가져오기 실패:", error);
       }
@@ -564,6 +576,7 @@ const MainPage = () => {
 
     fetchData();
   }, []);
+
   // 컴포넌트 순서가 변경될 때마다 로컬 스토리지에 저장
   useEffect(() => {
     if (!isEditing) {

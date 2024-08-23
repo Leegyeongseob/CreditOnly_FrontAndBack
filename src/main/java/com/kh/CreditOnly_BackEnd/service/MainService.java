@@ -29,6 +29,7 @@ public class MainService {
     private final HelpRepository helpRepository;
     private final AnnouncementRepository announcementRepository;
     private final InformationRepository informationRepository;
+
     @PersistenceContext
     EntityManager em;
 

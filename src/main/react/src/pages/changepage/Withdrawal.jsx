@@ -7,7 +7,7 @@ import Modal from "../../common/utils/Modal";
 import MemberAxiosApi from "../../axiosapi/MemberAxiosApi";
 import cry from "../../img/loginImg/울음.gif";
 const Contain = styled.div`
-  width: 60%;
+  width: 80%;
   height: 80%;
   display: flex;
   flex-direction: column;
@@ -17,7 +17,7 @@ const Contain = styled.div`
 
 const InputDiv = styled.div`
   width: 100%;
-  height: 70%;
+  height: 80%;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -25,7 +25,7 @@ const InputDiv = styled.div`
 `;
 const InputDetailDiv = styled.div`
   width: 100%;
-  height: 27%;
+  height: 25%;
   display: flex;
   gap: 2px;
   display: flex;
@@ -54,13 +54,13 @@ const InputDetailDiv = styled.div`
   & > .InputEmail,
   .InputCode {
     width: 76%;
-    height: 70%;
+    height: 70px;
     border-radius: 0.521vw;
     border: 1px solid #000;
     outline: none;
     box-shadow: 0 6px 9px rgba(0, 0, 0, 0.3);
     padding-left: 5px;
-    font-size: 3vh;
+    font-size: 2.1vh;
     padding-left: 10px;
     font-weight: 600;
     &::placeholder {
@@ -79,7 +79,7 @@ const Empty = styled.div`
 `;
 const EmailAthouized = styled.div`
   width: 15%;
-  height: 70%;
+  height: 70px;
   border-radius: 10px;
   border: none;
   background-color: ${({ isActive }) => (isActive ? "#8afc9d" : "#fff")};
@@ -96,21 +96,26 @@ const EmailAthouized = styled.div`
     background-color: ${({ isActive }) => (isActive ? "#fff" : "#88ff9c")};
     color: ${({ isActive }) => (isActive ? "#5b3092a9" : "#fff")};
   }
+  @media screen and (max-width: 610px) {
+    font-size: 13px;
+  }
 `;
 
 const ButtonDiv = styled.div`
   width: 100%;
-  height: 30%;
+  height: 20%;
   display: flex;
   flex-direction: column;
   justify-content: first baseline;
   align-items: center;
 `;
+
 const WithdrawalButton = styled.div`
   width: 200px;
   height: 50%;
   background-color: ${({ isActive }) => (isActive ? "#1A8350" : "#fff")};
   border-radius: 12px;
+  padding: 5px;
   font-size: 25px;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-style: italic;
@@ -124,9 +129,17 @@ const WithdrawalButton = styled.div`
     background-color: ${({ isActive }) =>
       isActive ? "#105D38" : "rgba(0, 0, 0, 0.1)"};
   }
+  @media screen and (max-width: 768px) {
+    font-size: 21px;
+  }
+  @media screen and (max-width: 360px) {
+    width: 110px;
+    height: 40%;
+    font-size: 18px;
+  }
 `;
 const WithdrawalButtonDiv = styled.div`
-  width: 23%;
+  width: 25%;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -135,12 +148,15 @@ const WithdrawalButtonDiv = styled.div`
 
 const FindPwdText = styled.div`
   width: 100%;
-  height: 40%;
-  font-size: 55px;
+  height: 30%;
+  font-size: 50px;
   color: #fff;
   font-weight: bold;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
+  @media screen and (max-width: 1200px) {
+    font-size: 40px;
+  }
 `;
 const FindByPwd = styled.div`
   width: 100%;
@@ -155,24 +171,35 @@ const FindByPwd = styled.div`
     color: #367ee9;
     font-size: 21px;
   }
+  @media screen and (max-width: 610px) {
+    font-size: 18px;
+  }
 `;
 const GoToLoginPage = styled.div`
-  width: 80%;
+  width: 75%;
   height: 100%;
-  margin-right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   & > .remember {
     width: 100%;
     height: 40%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-start;
     align-items: end;
     font-size: 20px;
+    @media screen and (max-width: 610px) {
+      font-size: 15px;
+    }
+    @media screen and (max-width: 360px) {
+      font-size: 11px;
+    }
   }
   & > .backToSetting {
     width: 100%;
     height: 60%;
     display: flex;
-    justify-content: end;
+    justify-content: flex-start;
     align-items: first baseline;
     font-weight: 600;
     font-size: 35px;
@@ -180,6 +207,12 @@ const GoToLoginPage = styled.div`
     &:hover {
       color: #367ee9;
       font-size: 36px;
+    }
+    @media screen and (max-width: 610px) {
+      font-size: 28px;
+    }
+    @media screen and (max-width: 360px) {
+      font-size: 20px;
     }
   }
 `;
@@ -195,19 +228,24 @@ const Message = styled.div`
   justify-content: center;
   color: ${({ isCorrect }) => (isCorrect ? "green" : "red")};
 `;
+
 const Contexts = styled.div`
   width: 100%;
-  height: 40%;
-  font-size: 2.5vw;
+  height: 30%;
+  font-size: 28px;
   font-weight: 700;
   display: flex;
   justify-content: center;
   align-items: center;
   text-align: center;
+  @media screen and (max-width: 610px) {
+    font-size: 23px;
+  }
 `;
+
 const FindPwdTextDetail = styled.div`
   width: 100%;
-  height: 20%;
+  height: 10%;
   color: #fff;
   font-size: 22px;
   font-weight: 600;
@@ -406,10 +444,7 @@ const Withdrawal = () => {
             </EmailAthouized>
           </InputDetailDiv>
         )}
-        <Contexts>
-          정말 탈퇴하실 건가요?
-          <br /> ㅠ.ㅠ
-        </Contexts>
+        <Contexts>정말 탈퇴하실 건가요...?</Contexts>
       </InputDiv>
       <ButtonDiv>
         <FindByPwd onClick={LogoutBtnClickHandler}>

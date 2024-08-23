@@ -1,35 +1,6 @@
-import { Outlet, useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import logo from "../../img/loginImg/findPageLogoImg.png";
-import { useEffect, useState } from "react";
-import FindByLeft from "./FindByLeft";
-
-const LoginPage = styled.div`
-  background-color: #ffffff;
-  width: 100%;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  @media screen and (max-width: 610px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-`;
-const Background = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  flex-direction: row;
-  @media screen and (max-width: 610px) {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-  }
-`;
 
 const LeftDiv = styled.div`
   width: 42.6%;
@@ -38,9 +9,6 @@ const LeftDiv = styled.div`
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  @media screen and (max-width: 610px) {
-    display: none;
-  }
   @media screen and (max-width: 610px) {
     display: flex;
     width: 100%;
@@ -57,10 +25,12 @@ const SinLogo = styled.div`
   background-repeat: no-repeat;
   cursor: pointer; /* 마우스 오버 시 손가락 모양 커서 */
   @media screen and (max-width: 768px) {
-    width: 150px;
-    height: 150px;
+    width: 100px;
+    height: 100px;
   }
   @media screen and (max-width: 610px) {
+    width: 150px;
+    height: 150px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,16 +63,7 @@ const TextBox = styled.div`
   text-align: center;
   justify-content: start;
   @media screen and (max-width: 768px) {
-    position: fixed;
-    width: 350px;
-    height: 650px;
-    bottom: 20px;
-    left: 20px;
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
-    background-color: #f5f5f5;
+    display: none;
   }
   @media screen and (max-width: 610px) {
     display: none;
@@ -197,31 +158,7 @@ const IdText = styled.div`
   }
 `;
 
-const Rectangle = styled.div`
-  background-color: #2ecc71;
-  border-top-left-radius: 38px;
-  border-bottom-left-radius: 38px;
-  box-shadow: 0px 4px 20px 5px #00000040;
-  left: calc(42.6%);
-  width: 57.4%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-  display: flex;
-  @media screen and (max-width: 1200px) {
-    min-width: 500px;
-  }
-  @media screen and (max-width: 610px) {
-    width: 100%;
-    min-width: 300px;
-    height: 80%;
-    border-radius: 38px 38px 0 0;
-  }
-`;
-
-const FindByForm = ({ withdrawal }) => {
-  const [isSideBarVisible, setIsSideBarVisible] = useState(true);
-
+const FindByLeft = ({ withdrawal }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const onClickLogo = (withdrawal) => {
@@ -232,48 +169,54 @@ const FindByForm = ({ withdrawal }) => {
     }
   };
 
-  // 사이드바의 가시성을 토글하는 함수
-  const toggleSideBar = () => {
-    setIsSideBarVisible(!isSideBarVisible);
-  };
-
-  useEffect(() => {
-    // 컴포넌트가 마운트될 때 리사이즈 이벤트 리스너 추가
-    window.addEventListener("resize", handleResize);
-
-    // 컴포넌트가 마운트될 때 한 번 체크
-    handleResize();
-
-    // 컴포넌트가 언마운트될 때 리사이즈 이벤트 리스너 제거
-    return () => {
-      window.removeEventListener("resize", handleResize);
-    };
-  }, []);
-
-  // 화면 크기 변화에 따라 사이드바를 숨기거나 보이게 설정하는 함수
-  const handleResize = () => {
-    if (window.innerWidth < 769) {
-      setIsSideBarVisible(false);
-    }
-    if (window.innerWidth < 501) {
-      setIsSideBarVisible(true);
-    } else {
-      setIsSideBarVisible(true);
-    }
-  };
-
   return (
-    <LoginPage>
-      <Background>
-        {isSideBarVisible && (
-          <FindByLeft toggleSideBar={toggleSideBar} withdrawal={withdrawal} />
-        )}
-        <Rectangle>
-          <Outlet />
-        </Rectangle>
-      </Background>
-    </LoginPage>
+    <LeftDiv>
+      <LogoDiv>
+        <SinLogo
+          onClick={() => {
+            onClickLogo(withdrawal);
+          }}
+        />
+      </LogoDiv>
+      {location.pathname === "/findbypwd" ||
+      location.pathname === "/resetpwd" ? ( // 경로에 따라 조건부 렌더링
+        <TextBox>
+          <PwText>비밀번호 찾기</PwText>
+          <PwDetail>
+            1. 비밀번호는 최소 8자 이상, 대문자, 소문자, 숫자, 특수문자를
+            포함해야 합니다.
+          </PwDetail>
+          <PwDetail>
+            2. 새 비밀번호를 한 번 더 입력하여 확인해 주세요. '비밀번호 변경'
+            버튼을 클릭하면 재설정이 완료됩니다.
+          </PwDetail>
+          <PwDetail>
+            주의: 안전한 비밀번호를 사용하시고, 다른 사이트와 동일한 비밀번호를
+            사용하지 마세요.
+          </PwDetail>
+        </TextBox>
+      ) : location.pathname === "/findbyemail" ? ( // 다른 경로에 따라 다른 콘텐츠 표시
+        <TextBox>
+          <IdText>아이디 찾기</IdText>
+          <Detail>보안을 위해 이메일의 일부가 숨겨져 표시됩니다.</Detail>
+        </TextBox>
+      ) : location.pathname === "/withdrawal" ? ( // 다른 경로에 따라 다른 콘텐츠 표시
+        <TextBox>
+          <ExitText>회원탈퇴</ExitText>
+          <Detail>
+            회원탈퇴 절차를 시작하려면 이메일 인증이 필요합니다.
+            <br /> 귀하의 이메일 주소로 인증번호가 전송되었습니다.
+            <br /> 이메일을 확인하시고 인증번호를 입력하여 탈퇴 절차를 완료해
+            주시기 바랍니다. <br />이 과정은 귀하의 계정안전을 보장하고,
+            무단으로 탈퇴가 이루어지지 않도록 하기 위한 중요한 단계입니다.{" "}
+            <br />
+            이메일을 찾을 수 없거나 추가적인 도움이 필요하시면 언제든지 지원팀에
+            문의해 주세요.
+          </Detail>
+        </TextBox>
+      ) : null}
+    </LeftDiv>
   );
 };
 
-export default FindByForm;
+export default FindByLeft;

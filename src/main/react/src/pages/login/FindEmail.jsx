@@ -13,10 +13,8 @@ const InputDiv = styled.div`
   justify-content: center;
   align-items: center;
   overflow-x: hidden;
-  overflow-y: hidden;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     height: 100%;
-    /* background-color: antiquewhite; */
   }
 `;
 const ButtonDiv = styled.div`
@@ -33,7 +31,7 @@ const FindButtonDiv = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     margin-top: 20px;
   }
 `;
@@ -51,7 +49,7 @@ const FindButton = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: 600;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     height: 70px;
     font-size: 25px;
   }
@@ -139,7 +137,7 @@ const RegisterationInput2 = styled.input`
     opacity: 0.5;
     font-weight: normal;
     font-style: italic;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 610px) {
       font-size: 20px;
     }
   }
@@ -161,7 +159,7 @@ const FindByEmailWarp = styled.div`
 `;
 const FindEmailText = styled.div`
   width: 100%;
-  height: 20%;
+  height: 40%;
   font-size: 55px;
   color: #fff;
   word-wrap: break-word;
@@ -170,7 +168,7 @@ const FindEmailText = styled.div`
   font-weight: bold;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     font-size: 45px;
     display: flex;
     text-align: center;
@@ -179,11 +177,11 @@ const FindEmailText = styled.div`
 `;
 const FindEmailTextDetail = styled.div`
   width: 100%;
-  height: 10%;
+  height: 20%;
   color: #fff;
   font-size: 22px;
   font-weight: 600;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -227,7 +225,7 @@ const GoToLoginPage = styled.div`
     align-items: end;
     text-align: end;
     font-size: 20px;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 610px) {
       display: none;
     }
   }
@@ -241,7 +239,7 @@ const GoToLoginPage = styled.div`
     align-items: first baseline;
     font-weight: 600;
     font-size: clamp(20px, 3vw, 35px);
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 610px) {
     }
     cursor: pointer;
     &:hover {
@@ -254,7 +252,7 @@ const NavigateDiv = styled.div`
   width: 100%;
   height: 80%;
   display: flex;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     width: 100%;
     height: 80%;
     display: flex;

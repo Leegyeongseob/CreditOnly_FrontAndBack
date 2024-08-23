@@ -5,8 +5,37 @@ import LoginAxios from "../../axiosapi/LoginAxios";
 import emailjs from "emailjs-com";
 import Modal from "../../common/utils/Modal";
 import Common from "../../common/Common";
-import termNote from "../../img/loginImg/findglass.png";
 import { UserEmailContext } from "../../contextapi/UserEmailProvider";
+import logoImg from "../../img/background/CreditOnlyLogo.png";
+
+const LogoImgDiv = styled.div`
+  width: 20%;
+  height: 100%;
+  display: flex;
+  justify-content: flex-start;
+  align-items: flex-start;
+  @media screen and (max-width: 1200px) {
+    min-width: 200px;
+  }
+  @media screen and (max-width: 700px) {
+    display: none;
+  }
+  @media screen and (max-width: 500px) {
+    display: flex;
+    width: 50%;
+    height: 20%;
+  }
+`;
+
+const LogoImg = styled.div`
+  width: 250px;
+  height: 190px;
+  background-image: url(${logoImg});
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: contain;
+`;
+
 const TitleDiv = styled.div`
   width: 100%;
   height: 23%;
@@ -17,6 +46,9 @@ const TitleDiv = styled.div`
   font-weight: 900;
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   color: #000;
+  @media screen and (max-width: 1200px) {
+    font-size: 35px;
+  }
 `;
 const InputDiv = styled.div`
   width: 100%;
@@ -43,12 +75,24 @@ const InputDetailDiv = styled.div`
     font-size: 23px;
     font-weight: bolder;
     outline: none;
+    @media screen and (max-width: 1200px) {
+      font-size: 21px;
+    }
+    @media screen and (max-width: 500px) {
+      font-size: 18px;
+    }
     &::placeholder {
-      font-size: clamp(20px, 2.5vw, 30px);
+      font-size: clamp(20px, 2.5vw, 27px);
       color: #808080;
       font-weight: normal;
       font-style: italic;
       opacity: 0.5;
+      @media screen and (max-width: 1200px) {
+        font-size: 22px;
+      }
+      @media screen and (max-width: 500px) {
+        font-size: 16px;
+      }
     }
   }
   & > .InputEmail,
@@ -62,12 +106,24 @@ const InputDetailDiv = styled.div`
     font-size: 23px;
     font-weight: bolder;
     outline: none;
+    @media screen and (max-width: 1200px) {
+      font-size: 21px;
+    }
+    @media screen and (max-width: 500px) {
+      font-size: 18px;
+    }
     &::placeholder {
-      font-size: clamp(15px, 2.5vw, 30px);
+      font-size: clamp(15px, 2.5vw, 27px);
       color: gray;
       font-weight: normal;
       font-style: italic;
       opacity: 0.5;
+      @media screen and (max-width: 1200px) {
+        font-size: 22px;
+      }
+      @media screen and (max-width: 500px) {
+        font-size: 16px;
+      }
     }
   }
 `;
@@ -96,6 +152,12 @@ const EmailAthouized = styled.div`
     background-color: ${({ isActive }) => (isActive ? "#fff" : "#367EE9")};
     color: ${({ isActive }) => (isActive ? "gray" : "#fff")};
   }
+  @media screen and (max-width: 1200px) {
+    font-size: 15px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 13px;
+  }
 `;
 const RegisterationInput1 = styled.input`
   width: 45%;
@@ -107,12 +169,24 @@ const RegisterationInput1 = styled.input`
   font-size: 23px;
   font-weight: bolder;
   outline: none;
+  @media screen and (max-width: 1200px) {
+    font-size: 21px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 18px;
+  }
   &::placeholder {
-    font-size: clamp(20px, 2.5vw, 30px);
+    font-size: clamp(20px, 2.5vw, 27px);
     color: gray;
     font-weight: normal;
     font-style: italic;
     opacity: 0.5;
+    @media screen and (max-width: 1200px) {
+      font-size: 22px;
+    }
+    @media screen and (max-width: 500px) {
+      font-size: 16px;
+    }
   }
 `;
 const Text = styled.div`
@@ -135,12 +209,24 @@ const RegisterationInput2 = styled.input`
   font-size: 23px;
   font-weight: bolder;
   outline: none;
+  @media screen and (max-width: 1200px) {
+    font-size: 21px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 18px;
+  }
   &::placeholder {
-    font-size: clamp(10px, 2.5vw, 30px);
+    font-size: clamp(20px, 2.5vw, 27px);
     color: gray;
     font-weight: normal;
     font-style: italic;
     opacity: 0.5;
+    @media screen and (max-width: 1200px) {
+      font-size: 22px;
+    }
+    @media screen and (max-width: 500px) {
+      font-size: 16px;
+    }
   }
 `;
 const TermsText = styled.div`
@@ -179,6 +265,12 @@ const SignupButton = styled.div`
     background-color: ${({ isActive }) =>
       isActive ? "rgba(0, 0, 0, 0.6)" : "rgba(0, 0, 0, 0.1)"};
   }
+  @media screen and (max-width: 1200px) {
+    font-size: 23px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 20px;
+  }
 `;
 const InputDetailDiv2 = styled.div`
   width: 100%;
@@ -204,15 +296,24 @@ const Message = styled.div`
   display: flex;
   justify-content: center;
   color: ${({ isCorrect }) => (isCorrect ? "green" : "red")};
+  @media screen and (max-width: 1200px) {
+    font-size: 13px;
+  }
+  @media screen and (max-width: 500px) {
+    font-size: 12px;
+  }
 `;
 const TermsForm = styled.div`
-  width: 100%;
+  width: 70%;
   height: 80%;
   border-radius: 10px;
   padding: 30px;
   position: absolute;
   overflow-y: auto;
   background-color: aliceblue;
+  @media screen and (max-width: 500px) {
+    padding: 20px;
+  }
 `;
 // focus-in-expand 애니메이션 정의
 const focusInExpand = keyframes`
@@ -352,6 +453,9 @@ const OverlapGroupWrapper = styled.div`
   display: flex;
   justify-content: center; /* 가로 중앙 정렬 */
   align-items: center; /* 세로 중앙 정렬 */
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 
 // 오버랩 그룹
@@ -360,6 +464,13 @@ const OverlapGroup = styled.div`
   width: 100%; /* 화면 너비에 맞게 조정 */
   max-width: 4000px; /* 최대 너비 설정 */
   position: relative;
+  display: flex;
+  justify-content: flex-end;
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 
 // 사각형
@@ -368,13 +479,20 @@ const Rectangle = styled.div`
   border-top-left-radius: 38px;
   border-bottom-left-radius: 38px;
   height: 100%;
-  width: 60%;
-  position: relative;
+  width: 72%;
   display: flex;
   left: calc(40%); /* 중앙 배치: 좌우 중앙 */
   flex-direction: column; /* 세로 방향으로 정렬 */
   align-items: center; /* 가로 방향으로 중앙 정렬 */
   justify-content: center; /* 세로 방향으로 중앙 정렬 */
+  @media screen and (max-width: 1200px) {
+    min-width: 500px;
+  }
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    min-width: 300px;
+    border-radius: 38px 38px 0 0;
+  }
 `;
 const LoginWrapping = styled.div`
   width: 60%;
@@ -383,6 +501,9 @@ const LoginWrapping = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: 500px) {
+    width: 75%;
+  }
 `;
 const SubTitle = styled.div`
   width: 100%;
@@ -717,6 +838,9 @@ const SignUp = () => {
   return (
     <Screen>
       <OverlapGroupWrapper>
+        <LogoImgDiv>
+          <LogoImg />
+        </LogoImgDiv>
         <OverlapGroup>
           <Rectangle>
             <LoginWrapping>

@@ -18,7 +18,7 @@ const NavigateDiv = styled.div`
   width: 100%;
   height: 80%;
   display: flex;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     width: 100%;
     height: 80%;
     display: flex;
@@ -35,6 +35,10 @@ const ButtonDiv = styled.div`
   flex-direction: column;
   justify-content: first baseline;
   align-items: center;
+
+  @media screen and (max-width: 610px) {
+    height: 33%;
+  }
 `;
 const FindButtonDiv = styled.div`
   width: 50%;
@@ -48,6 +52,7 @@ const FindButton = styled.div`
   width: 100%;
   min-width: 110px;
   height: 50%;
+  min-height: 64px;
   background-color: ${({ isActive }) => (isActive ? "#1A8350" : "#fff")};
   border-radius: 12px;
   font-size: clamp(22px, 2vw, 30px);
@@ -58,7 +63,7 @@ const FindButton = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: 600;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     font-size: 20px;
   }
   cursor: ${({ isActive }) => (isActive ? "pointer" : "not-allowed")};
@@ -76,7 +81,7 @@ const InputDetailDiv = styled.div`
   justify-content: center;
   align-items: center;
   & > .InputClass {
-    width: 90%;
+    width: 100%;
     height: 70%;
     border-radius: 0.521vw;
     border: 1px solid #000;
@@ -88,7 +93,7 @@ const InputDetailDiv = styled.div`
     font-weight: 600;
     &::placeholder {
       text-align: center;
-      font-size: 2.5vh;
+      font-size: clamp(11px, 3vw, 20px);
       color: #5a3092;
       opacity: 0.5;
       font-weight: normal;
@@ -97,7 +102,7 @@ const InputDetailDiv = styled.div`
   }
   & > .InputEmail,
   .InputCode {
-    width: 76%;
+    width: 83%;
     height: 70%;
     border-radius: 0.521vw;
     border: 1px solid #000;
@@ -109,7 +114,7 @@ const InputDetailDiv = styled.div`
     font-weight: 600;
     &::placeholder {
       text-align: center;
-      font-size: 2.5vh;
+      font-size: clamp(11px, 3vw, 20px);
       color: #5a3092;
       opacity: 0.5;
       font-weight: normal;
@@ -119,7 +124,7 @@ const InputDetailDiv = styled.div`
 `;
 
 const RegisterationInput1 = styled.input`
-  width: 40%;
+  width: 44%;
   height: 70%;
   border-radius: 0.521vw;
   border: 1px solid #000;
@@ -131,7 +136,7 @@ const RegisterationInput1 = styled.input`
   font-weight: 600;
   &::placeholder {
     text-align: center;
-    font-size: 2.5vh;
+    font-size: clamp(11px, 3vw, 20px);
     color: #5a3092;
     opacity: 0.5;
     font-weight: normal;
@@ -149,7 +154,7 @@ const Text = styled.div`
   align-items: center;
 `;
 const RegisterationInput2 = styled.input`
-  width: 47%;
+  width: 53%;
   height: 70%;
   border-radius: 0.521vw;
   border: 1px solid #000;
@@ -161,7 +166,7 @@ const RegisterationInput2 = styled.input`
   font-weight: 600;
   &::placeholder {
     text-align: center;
-    font-size: 2.5vh;
+    font-size: clamp(8px, 2.5vw, 20px);
     color: #5a3092;
     opacity: 0.5;
     font-weight: normal;
@@ -191,7 +196,7 @@ const FindPwdText = styled.div`
   font-weight: bold;
   font-family: "Trebuchet MS", "Lucida Sans Unicode", "Lucida Grande",
     "Lucida Sans", Arial, sans-serif;
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: 610px) {
     font-size: 40px;
     display: flex;
     /* background-color: black; */
@@ -207,11 +212,16 @@ const FindPwdTextDetail = styled.div`
 `;
 const FindPwdWarp = styled.div`
   width: 80%;
+  min-width: 200px;
   height: 65%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: 610px) {
+    height: 90%;
+  }
 `;
 const FindByPwd = styled.div`
   width: 100%;
@@ -244,7 +254,7 @@ const GoToLoginPage = styled.div`
     align-items: end;
     text-align: end;
     font-size: 20px;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 610px) {
       font-size: 17px;
     }
     @media screen and (max-width: 352px) {
@@ -261,7 +271,7 @@ const GoToLoginPage = styled.div`
     font-weight: 600;
     font-size: clamp(20px, 3vw, 35px);
     cursor: pointer;
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: 610px) {
       font-size: 17px;
     }
 

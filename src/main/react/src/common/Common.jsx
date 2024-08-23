@@ -4,8 +4,7 @@ import "moment/locale/ko"; // 한글 로컬라이제이션
 moment.locale("ko"); // 한글 설정 적용
 
 const Common = {
-  CreditOnly_DOMAIN: "https://www.creditonly.store",
-  CreditOnly_PythonFlask: "http://localhost:5000",
+  CreditOnly_DOMAIN: "http://localhost:8111",
 
   timeFromNow: (timestamp) => {
     return moment(timestamp).fromNow();

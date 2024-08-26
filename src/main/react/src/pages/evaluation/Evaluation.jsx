@@ -136,7 +136,7 @@ const MyEvaluation = styled.div`
 const CreditText = styled.div`
   width: 100%;
   height: 1vw;
-  font-size: 1vw;
+  font-size: clamp(12px, 1vw, 20px);
   font-weight: 600;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   display: flex;

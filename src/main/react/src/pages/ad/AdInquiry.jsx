@@ -18,7 +18,7 @@ const Head = styled.div`
   width: 100%;
   height: 10%;
   max-height: 100px;
-  /* background-color: brown; */
+  background-color: #aafaae;
   display: flex;
   gap: 5%;
   justify-content: end;
@@ -26,7 +26,7 @@ const Head = styled.div`
   padding-right: 5%;
 `;
 const HeadBtn = styled.div`
-  width: 15%;
+  width: 20%;
   max-width: 200px;
   height: 50%;
   color: black;
@@ -35,6 +35,9 @@ const HeadBtn = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  @media screen and (max-width: 368px) {
+    width: 25%;
+  }
 `;
 const HeadBtnText = styled.div`
   width: auto;
@@ -59,8 +62,6 @@ const IntroDetail = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  /* padding-left: 10%; */
-  /* padding-top: 20%; */
 `;
 const IntroBigD = styled.div`
   color: black;

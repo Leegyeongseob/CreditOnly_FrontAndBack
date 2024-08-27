@@ -8,6 +8,7 @@ import { LiaToggleOffSolid, LiaToggleOnSolid } from "react-icons/lia";
 import Comments from "./Comment/Comment";
 import NewsForm from "./NewsForm";
 import useImageErrorHandler from "./useImage";
+import Loading from "../evaluation/Loading";
 
 const Wrap = styled.div`
   display: flex;
@@ -214,7 +215,7 @@ const NewsDetail = () => {
     fetchItem();
   }, [id]);
 
-  if (loading) return <p>Loading...</p>;
+  if (loading) return <Loading />;
   if (error) return <p>{error}</p>;
   if (!item) return <p>뉴스 항목을 찾을 수 없습니다.</p>;
 

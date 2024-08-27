@@ -6,6 +6,7 @@ import { FaPlus } from "react-icons/fa6";
 import InformationAxios from "../../axiosapi/InformationAxios";
 import Banner from "../banner/Banner";
 import useImageErrorHandler from "./useImage";
+import Loading from "../evaluation/Loading";
 
 const Container = styled.div`
   width: 100%;
@@ -269,7 +270,7 @@ const CreditInformation = () => {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // 로딩 중일 때 표시할 내용
+    return <Loading />; // 로딩 중일 때 표시할 내용
   }
 
   return (

@@ -10,7 +10,7 @@ import CreditScore from "../../img/evaluation/creditScore.png";
 import { UserEmailContext } from "../../contextapi/UserEmailProvider";
 import IsNotCreditEvaluationForm from "./IsNotCreditEvaluationForm";
 import Loading from "./Loading";
-import Modal from "../../common/utils/ImageModal";
+import Modal from "../../pages/help/HelpModal";
 import NotCreditInput from "../../img/evaluation/not-creditInput.gif";
 const Container = styled.div`
   width: 100%;
@@ -85,6 +85,9 @@ const CrediEvaluation = styled.div`
   @media screen and (max-width: 768px) {
     height: 100%;
   }
+  @media screen and (max-width: 457px) {
+    justify-content: flex-end;
+  }
 `;
 
 const CreditView = styled.div`
@@ -120,6 +123,9 @@ const TextEvaluation = styled.div`
   @media screen and (max-width: 768px) {
     font-size: 14px;
   }
+  @media screen and (max-width: 457px) {
+    display: ${({ positionfirst }) => (positionfirst ? "none" : "flex-end")};
+  }
 `;
 const MyEvaluation = styled.div`
   width: 200px;
@@ -130,13 +136,14 @@ const MyEvaluation = styled.div`
   align-items: center;
   padding: 10px;
   @media screen and (max-width: 768px) {
+    width: 150px;
     font-size: 16px;
   }
 `;
 const CreditText = styled.div`
   width: 100%;
   height: 1vw;
-  font-size: clamp(12px, 1vw, 20px);
+  font-size: 1vw;
   font-weight: 600;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   display: flex;
@@ -226,7 +233,7 @@ const Evaluation = () => {
       <ViewDiv>
         {isCreditEvaluation &&
           (isLoading ? (
-            <Loading />
+            <Loading creditInfo={false}/>
           ) : (
             <CreditView>
               <ChartDiv>

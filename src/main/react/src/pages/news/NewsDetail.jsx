@@ -215,7 +215,7 @@ const NewsDetail = () => {
     fetchItem();
   }, [id]);
 
-  if (loading) return <Loading />;
+  if (loading) return <Loading creditInfo={true}/>;
   if (error) return <p>{error}</p>;
   if (!item) return <p>뉴스 항목을 찾을 수 없습니다.</p>;
 

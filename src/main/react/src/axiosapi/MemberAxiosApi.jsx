@@ -45,6 +45,10 @@ const MemberAxiosApi = {
   getAdminEmails: async () => {
     return await AxiosInstance.get("/member/adminEmails");
   },
+  //주민등록번호 가져오기
+  getJumin: async(email)=>{
+    return await AxiosInstance.get(`member/getJumin?email=${email}`);
+  }
 };
 
 export default MemberAxiosApi;

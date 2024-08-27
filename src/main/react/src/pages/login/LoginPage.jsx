@@ -71,7 +71,6 @@ const FindDiv = styled.div`
 
   @media screen and (max-width: 500px) {
     order: ${({ order }) => order || 0};
-
   }
 `;
 
@@ -183,7 +182,7 @@ const SimpleLogin = styled.div`
 `;
 
 const CircleSide = styled.div`
-  width: 37px;
+  width: 50px;
   aspect-ratio: 1 / 1;
   border: none;
   border-radius: 50%;
@@ -192,6 +191,7 @@ const CircleSide = styled.div`
   justify-content: center;
   align-items: center;
   @media screen and (max-width: 500px) {
+    width: 40px;
   }
 `;
 const GoogleIcon = styled(FcGoogle)`

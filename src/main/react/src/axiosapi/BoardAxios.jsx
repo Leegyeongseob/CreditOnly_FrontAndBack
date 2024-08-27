@@ -29,6 +29,7 @@ const BoardAxios = {
   },
   createBoard: async (boardReqDto, coupleName) => {
     try {
+      console.log("aixos 확인", boardReqDto);
       const response = await axiosInstance.post(
         `/boards/save/${coupleName}`,
         boardReqDto

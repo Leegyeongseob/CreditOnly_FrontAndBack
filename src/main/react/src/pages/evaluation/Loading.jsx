@@ -4,8 +4,8 @@ import { Oval } from "react-loader-spinner";
 import creditLoading from "../../img/Loading/creditLoading.gif";
 // CreditView 컴포넌트
 const CreditView = styled.div`
-  width: 48.8%;
-  height: 93%;
+  width: ${({ creditInfo }) => (creditInfo ? "100%" : "48.8%")};
+  height: ${({ creditInfo }) => (creditInfo ? "100%" : "93%")};
   background-color: ${({ theme }) => theme.commponent};
   color: ${({ theme }) => theme.color};
   transition: background-color 0.5s ease, color 0.5s ease;
@@ -38,9 +38,9 @@ const LoadingText = styled.div`
   font-weight: bold;
 `;
 
-const Loading = () => {
+const Loading = ({ creditInfo }) => {
   return (
-    <CreditView>
+    <CreditView creditInfo={creditInfo}>
       <LoadingImg url={creditLoading} />
       <LoadingText>잠시만 기다려주세요.</LoadingText>
     </CreditView>

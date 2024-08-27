@@ -216,6 +216,9 @@ const SearchOutput = styled.div`
       color:  #5549f7;
     `}
   }
+  @media screen and (max-width: 500px) {
+    flex-direction: column;
+  }
 `;
 
 const Searchlogo = styled.img`

@@ -3,7 +3,7 @@ import styled from "styled-components";
 import CommentList from "./CommentList";
 import CommentAxios from "../../../axiosapi/CommentAxios";
 import CommentLikeAxios from "../../../axiosapi/CommentLikeAxios";
-
+import Loading from "../../evaluation/Loading";
 // 스타일링 컴포넌트
 const CommentsContainer = styled.div`
   width: 260px;

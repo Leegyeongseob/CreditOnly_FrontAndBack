@@ -1,93 +1,202 @@
-import styled from "styled-components";
-export const Contain = styled.div`
-  width: auto;
-  height: auto;
-`;
-export const Screen = styled.div`
-  background-color: ${({ theme }) => theme.background};
-  color: ${({ theme }) => theme.color};
-  transition: background-color 0.5s ease, color 0.5s ease;
-  width: 100vw;
-  height: 93vh;
-  display: flex;
-  z-index: 11;
+import styled, { keyframes } from "styled-components";
+
+const fadeIn = keyframes`
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 `;
 
-export const MessageBox = styled.div`
-  width: 85%;
-  height: 100%;
-  justify-content: start;
-  align-items: center;
+const dots = keyframes`
+  0%, 20% {
+    color: rgba(0,0,0,0);
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  40% {
+    color: black;
+    text-shadow:
+      .25em 0 0 rgba(0,0,0,0),
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  60% {
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 rgba(0,0,0,0);
+  }
+  80%, 100% {
+    text-shadow:
+      .25em 0 0 black,
+      .5em 0 0 black;
+  }
+`;
+
+export const Contain = styled.div`
+  width: 100%;
+  height: 100vh;
   display: flex;
-  justify-content: center; /* 수평 중앙 정렬 */
-  align-items: center; /* 수직 중앙 정렬 */
   flex-direction: column;
 `;
 
-export const MessagePlace = styled.div`
-  width: 45%;
-  height: 85%;
+export const Screen = styled.div`
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.darkBackground : theme.lightBackground};
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.lightText : theme.darkText};
+  transition: background-color 0.5s ease, color 0.5s ease;
+  width: 100%;
+  height: calc(100vh - 6vh);
+  display: flex;
+  z-index: 11;
+  overflow: hidden;
+
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
+`;
+
+export const MessageBox = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 20px;
   overflow-y: auto;
+  height: calc(100vh - 6vh);
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    padding: 10px;
+  }
+`;
+
+export const MessagePlace = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+  overflow-y: auto;
+
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: calc(100% - 60px);
+    margin: 0 auto;
+  }
 `;
 
 export const MessageSendBox = styled.div`
-  width: 80%;
-  height: 15%;
+  width: 100%;
+  padding: 10px;
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.darkBackground : theme.lightBackground};
+  border-top: 1px solid
+    ${({ theme, isDarkMode }) =>
+      isDarkMode ? theme.darkBorder : theme.lightBorder};
   display: flex;
   justify-content: center;
   align-items: center;
+
+  @media screen and (max-width: 768px) {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    padding: 10px;
+  }
 `;
 
 export const MessageSendWrap = styled.div`
-  width: 80%;
-  height: 30%;
-  background-color: ${({ theme }) => theme.sideBar};
-  border: 1px solid ${({ theme }) => theme.border};
+  width: 100%;
+  max-width: 800px;
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.darkInputBackground : theme.lightInputBackground};
+  border: 1px solid
+    ${({ theme, isDarkMode }) =>
+      isDarkMode ? theme.darkBorder : theme.lightBorder};
   transition: background-color 0.5s ease, border 0.5s ease;
-  border-radius: 8px;
+  border-radius: 20px;
   display: flex;
   align-items: center;
-  max-width: 650px;
+
+  @media screen and (max-width: 768px) {
+    width: 95%;
+  }
 `;
 
 export const MessageSend = styled.input`
-  background-color: ${({ theme }) => theme.sideBar};
-  border: 1px solid ${({ theme }) => theme.border};
-  transition: background-color 0.5s ease, border 0.5s ease;
+  background-color: transparent;
   font-size: 15px;
   font-weight: lighter;
   width: 95%;
-  height: 100%;
+  height: 40px;
   border: none;
-  display: flex;
-  user-select: none;
-  border-radius: 8px;
-  align-items: center;
-  padding-left: 1.5%;
-  max-width: 650px;
+  border-radius: 20px;
+  padding: 0 15px;
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.lightText : theme.darkText};
   outline: none;
+
+  @media screen and (max-width: 768px) {
+    font-size: 14px;
+  }
 `;
 
 export const SendWrap = styled.div`
   cursor: pointer;
   font-size: 20px;
-  font-weight: 100;
+  padding: 0 15px;
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.lightText : theme.darkText};
+
+  @media screen and (max-width: 768px) {
+    font-size: 18px;
+  }
 `;
 
 export const MessageBubble = styled.div`
   max-width: 70%;
-  padding: 10px;
+  padding: 12px 18px;
+  margin: 10px 0;
   border-radius: 20px;
-  margin: 10px;
-  background-color: ${(props) =>
-    props.sender === "user" ? "#007bff" : "#f1f0f0"};
-  color: ${(props) => (props.sender === "user" ? "white" : "black")};
+  background: ${(props) =>
+    props.sender === "user"
+      ? "linear-gradient(135deg, #007bff, #0056b3)"
+      : props.isDarkMode
+      ? props.theme.darkBotBubble
+      : props.theme.lightBotBubble};
+  color: ${(props) =>
+    props.sender === "user"
+      ? "white"
+      : props.isDarkMode
+      ? props.theme.lightText
+      : props.theme.darkText};
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   align-self: ${(props) =>
     props.sender === "user" ? "flex-end" : "flex-start"};
+  font-size: 16px;
+  line-height: 1.4;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  animation: ${fadeIn} 0.5s ease forwards;
+
+  @media screen and (max-width: 768px) {
+    max-width: 85%;
+    font-size: 14px;
+  }
 `;
 
 export const LoadingIndicator = styled.div`
   text-align: center;
   padding: 10px;
   font-style: italic;
+  color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.lightText : theme.darkText};
+  &:after {
+    content: "...";
+    animation: ${dots} 1.5s steps(5, end) infinite;
+  }
 `;

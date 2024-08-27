@@ -2,7 +2,9 @@ import AxiosInstance from "./AxiosInstance";
 
 const GuestbookAxios = {
   getGuestBookEntries: async (coupleName) => {
+    console.log("커플이름 엑시오스확인",coupleName)
     const response = await AxiosInstance.get(`/guestbook/${coupleName}`);
+    console.log("response", response);
     return response.data;
   },
 

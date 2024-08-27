@@ -137,6 +137,8 @@ const Tdfont = styled.div`
     justify-content: center;
     align-items: flex-start;
     width: 100%;
+    border: 1px solid ${({ theme }) => theme.background};
+    border-radius: 10px;
     @media screen and (max-width: 768px) {
       width: 100%;
     }

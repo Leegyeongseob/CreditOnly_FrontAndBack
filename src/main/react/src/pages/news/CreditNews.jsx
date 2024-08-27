@@ -270,7 +270,7 @@ const CreditInformation = () => {
   }, []);
 
   if (loading) {
-    return <Loading />; // 로딩 중일 때 표시할 내용
+    return <Loading creditInfo={true}/>; // 로딩 중일 때 표시할 내용
   }
 
   return (

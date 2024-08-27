@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import styled from "styled-components";
 import { UserEmailContext } from "../../contextapi/UserEmailProvider";
 import { useNavigate } from "react-router-dom";
+import DataVisualization from "../../axiosapi/DataVisualization";
 const FormContainer = styled.div`
   width: 100%;
   margin: 0 auto;
@@ -161,42 +162,47 @@ const DetailItemTitle = styled.h4`
 `;
 const CreditDataInputForm = () => {
   const navigate = useNavigate();
-  const { setIsCreditEvaluation,setIsLoading } = useContext(UserEmailContext);
+  const { setIsCreditEvaluation, setIsLoading } = useContext(UserEmailContext);
 
   const [formData, setFormData] = useState({
-    jobType: "",
-    recentCreditAccounts: "",
+    jobType: "9",
+    recentCreditAccounts: "0",
     creditCardInstitutions: {
-      year1: "",
-      year2: "",
-      year3: "",
+      year1: "0",
+      year2: "0",
+      year3: "0",
     },
     unpaidLoans: {
-      under5M3Months: "",
-      under10M3Months: "",
-      under5M6Months: "",
-      under10M6Months: "",
-      under5M1Year: "",
-      under10M1Year: "",
+      under5M3Months: "0",
+      under10M3Months: "0",
+      under5M6Months: "0",
+      under10M6Months: "0",
+      under5M1Year: "0",
+      under10M1Year: "0",
     },
     loanExperience: {
-      subrogation: "",
-      writeOff: "",
-      sale: "",
-      debtRestructuring: "",
-      bankruptcy: "",
-      accelerationClause: "",
-      transferTermination: "",
+      subrogation: "0",
+      writeOff: "0",
+      sale: "0",
+      debtRestructuring: "0",
+      bankruptcy: "0",
+      accelerationClause: "0",
+      transferTermination: "0",
     },
-    totalUnpaidLoans: "",
+    totalUnpaidLoans: "0",
   });
   const [showDetails, setShowDetails] = useState(false);
   // 신용 평가하기 이벤트 핸들러
   const CreditEventOnClickHandler = () => {
     setIsCreditEvaluation(true);
     setIsLoading(true);
+    // 파이썬으로 데이터 전송
+    console.log("formData", formData);
+    postCreditDataAxios(formData);
     navigate("/evaluation");
-    
+  };
+  const postCreditDataAxios = async (data) => {
+    const response = await DataVisualization.postCreditInput(data);
   };
   const handleInputChange = (category, field, value) => {
     setFormData((prevData) => {

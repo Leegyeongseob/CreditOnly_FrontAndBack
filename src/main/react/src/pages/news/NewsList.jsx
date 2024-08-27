@@ -237,7 +237,17 @@ const AddNewsButton = styled.button`
     font-size: 12px;
   }
 `;
-
+const LoadingText = styled.div`
+  width: 100%;
+  height: 100%;
+  font-size: 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  @media screen and (max-width: 768px) {
+    font-size: 13px;
+  }
+`;
 const categories = [
   "전체",
   "신용조회 정보모음",
@@ -427,7 +437,7 @@ const NewsList = ({ onSave, onCancel }) => {
                 </Link>
               ))
             ) : (
-              <p>검색 결과가 없습니다.</p>
+              <LoadingText>검색 결과가 없습니다.</LoadingText>
             )}
           </ListWrap>
           <SearchContainer>

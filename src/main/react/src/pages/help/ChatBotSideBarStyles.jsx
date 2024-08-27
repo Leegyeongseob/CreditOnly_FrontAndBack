@@ -1,139 +1,94 @@
 import styled from "styled-components";
 
 export const Sidebar = styled.div`
-  width: 15%;
-  min-width: 282px;
+  width: 250px;
   height: 100%;
   display: flex;
-  background-color: ${({ theme }) => theme.background};
-  transition: background-color 0.5s ease, border-right 0.5s ease;
+  background-color: ${({ theme }) => theme.sideBar};
+  transition: background-color 0.5s ease, transform 0.3s ease;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  @media screen and (max-width: 1200px) {
+  padding: 20px;
+  overflow-y: auto;
+
+  @media screen and (max-width: 768px) {
     position: fixed;
-    min-width: 161.69px;
-    width: 200px;
-    top: 6%;
+    top: 0;
     left: 0;
-    background-color: ${({ theme }) => theme.background};
-    border-right: 1px solid ${({ theme }) => theme.borderBottom};
-    z-index: 100;
-    display: flex;
-    flex-direction: column;
-    padding: 10px;
+    transform: ${({ isOpen }) =>
+      isOpen ? "translateX(0)" : "translateX(-100%)"};
+    z-index: 1000;
+    width: 250px;
+    height: 100vh;
   }
 `;
 
 export const Menu = styled.div`
-  width: 98%;
+  width: 100%;
   height: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: start;
-  align-items: start;
-`;
-
-export const NewChatBox = styled.div`
-  width: 100%;
-  height: 70%;
-  display: flex;
-  justify-content: center;
-  align-items: start;
-  padding: 10px;
-  svg {
-    margin-right: 2.5%; /* 간격 조절 */
-  }
+  justify-content: flex-start;
+  align-items: flex-start;
 `;
 
 export const Back = styled.div`
   cursor: pointer;
-  width: 20%;
-  height: 5%;
-  max-width: 50px;
+  width: 40px;
+  height: 40px;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 24px;
+  margin-bottom: 20px;
+`;
+
+export const NewChatBox = styled.div`
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
 `;
 
 export const NewChatBtn = styled.div`
-  width: 90%;
-  height: 30px;
-  cursor: pointer;
-  background-color: #121212;
-  color: #fafafa;
-  transition: background-color 0.5s ease, color 0.5s ease;
-  font-size: 16px;
-  padding: 0 5% 0 5%;
-  align-items: center;
-  justify-content: space-between;
-  display: flex;
-  user-select: none;
-  border-radius: 10px;
-`;
-
-export const SettingBox = styled.div`
   width: 100%;
-  height: 180px;
-  user-select: none;
-  justify-content: flex-start;
-  align-items: center;
-  flex-direction: column;
-  display: flex;
-`;
-
-export const SetDetailTop = styled.div`
-  width: 80%;
-  height: 20%;
+  height: 40px;
   cursor: pointer;
-  justify-content: flex-start;
-  align-items: center;
+  background-color: #5a6acf;
+  color: #ffffff;
+  transition: background-color 0.3s ease;
+  font-size: 16px;
   display: flex;
-  padding-top: 8%;
-  padding-left: 10%;
-  gap: 3%;
-  border-top: 1px solid lightgray;
-  user-select: none;
-  &:active {
-    color: #b3b3b3;
-  }
-`;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
 
-export const SetDetail = styled.div`
-  width: 80%;
-  height: 20%;
-  padding-top: 8%;
-  cursor: pointer;
-  justify-content: flex-start;
-  align-items: center;
-  display: flex;
-  padding-left: 10%;
-  gap: 3%;
-  user-select: none;
-  &:active {
-    color: #b3b3b3;
+  &:hover {
+    background-color: #4a59b0;
   }
-  &:hover{
-    color:rgba(108, 108, 255, 0.653);
+
+  svg {
+    margin-right: 10px;
   }
 `;
 
 export const ConversationList = styled.div`
   width: 100%;
   overflow-y: auto;
-  max-height: 50%;
+  margin-bottom: 20px;
 `;
 
 export const ConversationItem = styled.div`
   padding: 10px;
   cursor: pointer;
   display: flex;
-  font-family: Arial, Helvetica, sans-serif;
   justify-content: space-between;
   align-items: center;
+  border-radius: 10px;
+  margin-bottom: 5px;
+
   &:hover {
-    background-color: rgba(0, 0, 0, 0.05);
+    background-color: rgba(90, 106, 207, 0.1);
   }
 `;
 
@@ -141,5 +96,72 @@ export const DeleteButton = styled.button`
   background: none;
   border: none;
   cursor: pointer;
-  color: red;
+  color: #ff4d4f;
+  font-size: 16px;
+
+  &:hover {
+    color: #ff7875;
+  }
+`;
+
+export const SettingBox = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: start;
+`;
+
+export const SetDetail = styled.div`
+  width: 100%;
+  padding: 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+
+  &:hover {
+    background-color: rgba(90, 106, 207, 0.1);
+  }
+
+  svg {
+    margin-right: 10px;
+  }
+`;
+
+export const ToggleButton = styled.button`
+  display: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1001;
+  background-color: ${({ theme }) => theme.primary};
+  border: none;
+  border-radius: 50%;
+  color: white;
+  width: 50px;
+  height: 50px;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+
+  @media screen and (max-width: 768px) {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+export const Overlay = styled.div`
+  display: none;
+
+  @media screen and (max-width: 768px) {
+    display: ${({ isOpen }) => (isOpen ? "block" : "none")};
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+  }
 `;

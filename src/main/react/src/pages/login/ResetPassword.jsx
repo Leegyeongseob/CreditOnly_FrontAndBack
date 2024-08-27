@@ -19,20 +19,28 @@ const ButtonDiv = styled.div`
   flex-direction: column;
   justify-content: first baseline;
   align-items: center;
+
+  @media screen and (max-width: 500px) {
+  height: 33%;
+  
+ }
 `;
 const FindButtonDiv = styled.div`
-  width: 20%;
+  width: 50%;
   height: 100%;
+  /* background-color: aliceblue; */
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 const FindButton = styled.div`
-  width: 200px;
+  width: 100%;
+  min-width: 110px;
   height: 50%;
+  min-height: 64px;
   background-color: ${({ isActive }) => (isActive ? "#1A8350" : "#fff")};
   border-radius: 12px;
-  font-size: 25px;
+  font-size: clamp(22px, 2vw, 30px);
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-style: italic;
   color: ${({ isActive }) => (isActive ? "#fff" : "#5a3092")};
@@ -40,6 +48,9 @@ const FindButton = styled.div`
   justify-content: center;
   align-items: center;
   font-weight: 600;
+  @media screen and (max-width: 500px) {
+    font-size: 20px;
+  }
   cursor: ${({ isActive }) => (isActive ? "pointer" : "not-allowed")};
   &:hover {
     background-color: ${({ isActive }) =>
@@ -112,6 +123,12 @@ const FindPwdWarp = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+ @media screen and (max-width: 500px) {
+  height: 90%;
+  
+ }
+ 
 `;
 const FindByPwd = styled.div`
   width: 100%;
@@ -130,27 +147,43 @@ const FindByPwd = styled.div`
 const GoToLoginPage = styled.div`
   width: 80%;
   height: 100%;
-  margin-right: 20px;
+  margin-right: 30px;
+  justify-content: center;
+  /* background-color: aliceblue; */
+  display: flex;
+  align-items: end;
+  flex-direction: column;
   & > .remember {
-    width: 100%;
-    height: 40%;
+    width: 80%;
+    height: 50%;
     display: flex;
     justify-content: end;
     align-items: end;
+    text-align: end;
     font-size: 20px;
+    @media screen and (max-width: 500px) {
+      font-size: 17px;
+    }
+    @media screen and (max-width: 352px) {
+      font-size: 15px;
+    }
   }
   & > .backToLogin {
-    width: 100%;
-    height: 60%;
+    width: 80%;
+    min-width: 120px;
+    height: 50%;
     display: flex;
     justify-content: end;
     align-items: first baseline;
     font-weight: 600;
-    font-size: 35px;
+    font-size: clamp(20px, 3vw, 35px);
     cursor: pointer;
+    @media screen and (max-width: 500px) {
+      font-size: 17px;
+    }
+
     &:hover {
       color: #367ee9;
-      font-size: 36px;
     }
   }
 `;
@@ -158,6 +191,14 @@ const NavigateDiv = styled.div`
   width: 100%;
   height: 80%;
   display: flex;
+  @media screen and (max-width: 500px) {
+    width: 100%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
 `;
 const ResetPassword = () => {
   // 키보드 입력

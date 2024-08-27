@@ -1,11 +1,8 @@
 import styled from "styled-components";
-import Logo from "../../img//background/CreditOnlyLogo.png";
 import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import CreditScoreChart from "../../chart/CreditScoreChart";
-import CreditGradeBarChart from "../../chart/CreditGradeBarChart";
 import CreditGradeRadarChart from "../../chart/CreditGradeRadarChart";
 import ResidentPieChart from "../../chart/ResidentStackedBarChart";
 import CreditScoreScatterChart from "../../chart/CreditScoreScatterChart ";
@@ -128,7 +125,7 @@ const BackBtn = styled.div`
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  margin-right: 50px;
+  margin-right: 10px;
   padding: 10px;
   @media screen and (max-width: 768px) {
     font-size: 16px;

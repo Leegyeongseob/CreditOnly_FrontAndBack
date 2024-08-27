@@ -736,7 +736,6 @@ const SignUp = () => {
       ) {
         kakaoLogin(kakaoEmail, kakaopwd);
         setKakaoImgUrl(kakaoUrl);
-        console.log("signUp kakaoImgUrl :", kakaoUrl);
         navigate("/mainpage");
       }
     } catch (error) {
@@ -754,8 +753,6 @@ const SignUp = () => {
     try {
       const response = await LoginAxios.login(kakoEmailvalue, kakaoPwdValue);
       if (response.data.grantType === "bearer") {
-        console.log("이거 : " + kakoEmailvalue);
-        console.log("제발 : " + kakaoPwdValue);
         console.log("accessToken : ", response.data.accessToken);
         console.log("refreshToken : ", response.data.refreshToken);
         Common.setAccessToken(response.data.accessToken);

@@ -476,7 +476,6 @@ const LoginPage = () => {
   }, [kakaoKey]);
 
   const responseKakao = (response) => {
-    console.log(response);
     KaKaoData(response);
   };
   const KaKaoData = async (response) => {
@@ -488,13 +487,8 @@ const LoginPage = () => {
         kakaoName: response.profile.properties.nickname,
         kakaoUrl: response.profile.properties.profile_image,
       };
-      console.log("kakaoEmail:" + propsToPass.kakaoEmail);
-      console.log("kakaopwd:" + propsToPass.kakaopwd);
-      console.log("kakaoName:" + propsToPass.kakaoName);
-      console.log("kakaoImgUrl:" + propsToPass.kakaoUrl);
       //이메일 존재하는지 확인하는 부분
       const emailExist = await LoginAxios.emailIsExist(propsToPass.kakaoEmail);
-      console.log("emailExist:" + emailExist.data);
 
       //이메일 존재하면 화면이동
       if (emailExist.data) {
@@ -511,15 +505,12 @@ const LoginPage = () => {
         setKakaoImgUrl(propsToPass.kakaoUrl);
         //이메일로 커플이름 찾는 비동기 함수
         const coupleNameSearchAxios = async (email) => {
-          console.log(email);
           navigate(`/mainpage`);
         };
         coupleNameSearchAxios(propsToPass.kakaoEmail);
       }
       //아니면 여기로 이동
       else {
-        console.log("else문까지는 와요!");
-        console.log("Navigating to sign-up page with props:", propsToPass);
         navigate(`/signup`, { state: propsToPass });
       }
     } catch (error) {

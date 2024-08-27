@@ -1,7 +1,9 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { Pie } from "react-chartjs-2";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import styled from "styled-components";
+import DataVisualization from "../axiosapi/DataVisualization";
+import Loading from "../pages/evaluation/Loading";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -21,21 +23,76 @@ const ChartDiv = styled.div`
   align-items: center;
 `;
 
-const JobDefaultLoanPieChart = ({
-  data = [
-    { job: "급여소득자", count: 42 },
-    { job: "개인사업자", count: 35 },
-    { job: "연금소득자", count: 12 },
-    { job: "주부", count: 18 },
-    { job: "전문직", count: 23 },
-    { job: "프리랜서", count: 29 },
-    { job: "무직", count: 47 },
-    { job: "기타", count: 15 },
-  ],
-}) => {
+const ErrorText = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #ff6b6b;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  @media screen and (max-width: 500px) {
+    font-size: 1rem;
+  }
+`;
+
+const JobDefaultLoanPieChart = () => {
+  const [chartData, setChartData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const darkMode = localStorage.getItem("isDarkMode") === "true";
 
-  const jobLabels = data.map((item) => item.job);
+  const jobMapping = {
+    1: "급여소득자",
+    2: "개인사업자",
+    3: "연금소득자",
+    4: "주부",
+    5: "전문직",
+    6: "프리랜서",
+    7: "무직",
+    9: "기타",
+  };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        setError(null);
+        const response = await DataVisualization.getJobDefaultLoanPieChart();
+        const rawData = response.data;
+
+        const jobData = Object.values(jobMapping).reduce((acc, job) => {
+          acc[job] = { total: 0, count: 0 };
+          return acc;
+        }, {});
+
+        rawData.forEach((item) => {
+          const job = jobMapping[item.HAC_CD] || "기타";
+          jobData[job].total += item.Loan;
+          jobData[job].count += 1;
+        });
+
+        const processedData = Object.entries(jobData).map(([job, data]) => ({
+          job,
+          count: data.count > 0 ? data.total / data.count : 0.2,
+        }));
+
+        // 데이터 값에 따라 내림차순 정렬
+        processedData.sort((a, b) => b.count - a.count);
+
+        setChartData(processedData);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("데이터를 불러오는 데 실패했습니다.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
 
   const backgroundColor = [
     "rgba(255, 99, 132, 0.8)",
@@ -48,17 +105,22 @@ const JobDefaultLoanPieChart = ({
     "rgba(83, 102, 255, 0.8)",
   ];
 
-  const chartData = {
-    labels: jobLabels,
-    datasets: [
-      {
-        data: data.map((item) => item.count),
-        backgroundColor: backgroundColor,
-        borderColor: backgroundColor.map((color) => color.replace("0.8", "1")),
-        borderWidth: 1,
-      },
-    ],
-  };
+  const data = useMemo(
+    () => ({
+      labels: chartData.map((item) => item.job),
+      datasets: [
+        {
+          data: chartData.map((item) => item.count),
+          backgroundColor: backgroundColor,
+          borderColor: backgroundColor.map((color) =>
+            color.replace("0.8", "1")
+          ),
+          borderWidth: 1,
+        },
+      ],
+    }),
+    [chartData]
+  );
 
   const options = {
     responsive: true,
@@ -75,8 +137,6 @@ const JobDefaultLoanPieChart = ({
         font: {
           size: 16,
         },
-        boxWidth: 40, // 색상 박스의 너비
-        boxHeight: 20, // 색상 박스의 높이
         color: darkMode ? "#fff" : "#333",
       },
       tooltip: {
@@ -89,7 +149,7 @@ const JobDefaultLoanPieChart = ({
               0
             );
             const percentage = ((value / total) * 100).toFixed(1);
-            return `${label}: ${percentage}% (${value})`;
+            return `${label}: ${percentage}% (${value.toFixed(2)})`;
           },
         },
         backgroundColor: darkMode
@@ -101,10 +161,18 @@ const JobDefaultLoanPieChart = ({
     },
   };
 
+  if (isLoading) {
+    return <Loading />;
+  }
+
+  if (error) {
+    return <ErrorText>{error}</ErrorText>;
+  }
+
   return (
     <Container>
       <ChartDiv>
-        <Pie data={chartData} options={options} />
+        <Pie data={data} options={options} />
       </ChartDiv>
     </Container>
   );

@@ -554,7 +554,6 @@ const MainPage = () => {
   //카카오 로그인시 프로필 자동 변경
   // contextApi에서 저장중인 email 불러오기
   const { isCreditEvaluation } = useContext(UserEmailContext);
-  console.log("isCreditEvaluation : ", isCreditEvaluation);
   // 이미지 매핑 객체 생성
   const localImages = [img1, img2, img3, img4];
   useEffect(() => {
@@ -563,7 +562,6 @@ const MainPage = () => {
         const infoData = await InformationAxios.getInformationByCategory(
           "신용조회 정보모음"
         );
-        console.log(infoData);
         // infoData를 처리하는 부분
         const processedInfoData = infoData.slice(0, 4).map((item, index) => ({
           ...item,

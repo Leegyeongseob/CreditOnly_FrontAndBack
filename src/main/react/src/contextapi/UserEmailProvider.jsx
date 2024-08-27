@@ -24,7 +24,6 @@ const UserEmailProvider = ({ children }) => {
         const userInfoResponse = await MemberAxiosApi.getAdminEmails();
         const adminEmailsArray = userInfoResponse.data; // data 속성에서 배열 추출
         setAdminEmails(Array.isArray(adminEmailsArray) ? adminEmailsArray : []);
-        console.log("관리자 이메일:", adminEmailsArray); // 디버깅용
       } catch (error) {
         console.error("Error fetching user info:", error);
       }

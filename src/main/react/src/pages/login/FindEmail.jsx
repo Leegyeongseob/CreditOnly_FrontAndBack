@@ -301,8 +301,6 @@ const FindEmail = () => {
   const findIdAxios = async () => {
     const combinedRnn = combineRRN(rrnFirstPart, rrnSecondPart);
     try {
-      console.log(Name);
-      console.log(combinedRnn);
       const showUserId = await LoginAxios.findIdResult(Name, combinedRnn);
 
       // showUserId.data가 List<String>으로 가정
@@ -314,7 +312,6 @@ const FindEmail = () => {
         return map;
       }, {});
 
-      console.log(userIdMap); // 결과를 콘솔에 출력
 
       SetHeaderContents("아이디 확인");
       setModalOpen(true);

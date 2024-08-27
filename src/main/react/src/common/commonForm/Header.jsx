@@ -419,7 +419,6 @@ const Header = ({
   const kakaoProfileImgAxios = useCallback(
     async (emailValue, imgUrlData) => {
       const res = await MemberAxiosApi.profileUrlSave(emailValue, imgUrlData);
-      console.log("kakaoProfile:", res.data);
       setImgUrl(imgUrlData);
     },
     [setImgUrl]
@@ -431,7 +430,6 @@ const Header = ({
       const response = await MemberAxiosApi.searchProfileUrl(emailValue);
       // 이미지가 DB에 없을 때
       if (response.data === "notExist") {
-        console.log("kakaoImgUrl : ", kakaoImgUrl);
         if (kakaoImgUrl) {
           kakaoProfileImgAxios(email, kakaoImgUrl);
         }
@@ -494,7 +492,6 @@ const Header = ({
   const fetchData = async () => {
     try {
       const searchList = await MainAxios.dataSearch(email, searchTerm);
-      console.log(searchList.data);
       setSearchData(searchList.data);
     } catch (error) {
       console.error("Error fetching search data:", error);

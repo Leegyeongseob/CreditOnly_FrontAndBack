@@ -374,7 +374,6 @@ const Withdrawal = () => {
     //DB에서 계정 삭제
     const memberDeleteAxios = async () => {
       const rsp = await MemberAxiosApi.memberDelete(inputEmail);
-      console.log(rsp.data);
       setModalOpen(true);
       setIsModalImg(true);
       SetHeaderContents("회원탈퇴");

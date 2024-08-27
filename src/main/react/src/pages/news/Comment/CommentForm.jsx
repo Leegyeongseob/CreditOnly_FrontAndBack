@@ -34,7 +34,6 @@ const SubmitButton = styled.button`
 const CommentForm = ({ informationId, parentId, onCommentAdded }) => {
   const [text, setText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // 제출 상태 관리
-  console.log("인포아이디",informationId)
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -47,12 +46,10 @@ const CommentForm = ({ informationId, parentId, onCommentAdded }) => {
           parentId: parentId,
           content: text,
         };
-        console.log("req데이터", commentReqDto);
         const response = await CommentAxios.createComment(commentReqDto);
 
         setText("");
         alert("댓글이 제출되었습니다.");
-        console.log("댓글 생성 응답:", response);
 
         // 부모 컴포넌트에 댓글 추가를 알림
         if (onCommentAdded) onCommentAdded(response);

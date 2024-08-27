@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Doughnut } from "react-chartjs-2";
 import styled from "styled-components";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";

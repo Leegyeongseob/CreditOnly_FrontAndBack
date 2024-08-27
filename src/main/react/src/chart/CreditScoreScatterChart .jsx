@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Scatter } from "react-chartjs-2";
 import {
   Chart as ChartJS,
@@ -8,154 +8,87 @@ import {
   Tooltip,
   Legend,
 } from "chart.js";
+import DataVisualization from "../axiosapi/DataVisualization";
+import styled from "styled-components";
+import Loading from "../pages/evaluation/Loading";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
-const CreditScoreScatterChart = ({
-  data = [
-    {
-      openAccounts5Years: 2,
-      cardInstitutes1Year: 1,
-      cardInstitutes2Years: 1,
-      cardInstitutes3Years: 1,
-      creditScore: 1,
-    },
-    {
-      openAccounts5Years: 3,
-      cardInstitutes1Year: 1,
-      cardInstitutes2Years: 2,
-      cardInstitutes3Years: 2,
-      creditScore: 2,
-    },
-    {
-      openAccounts5Years: 4,
-      cardInstitutes1Year: 2,
-      cardInstitutes2Years: 2,
-      cardInstitutes3Years: 3,
-      creditScore: 3,
-    },
-    {
-      openAccounts5Years: 5,
-      cardInstitutes1Year: 1,
-      cardInstitutes2Years: 3,
-      cardInstitutes3Years: 4,
-      creditScore: 3,
-    },
-    {
-      openAccounts5Years: 6,
-      cardInstitutes1Year: 2,
-      cardInstitutes2Years: 3,
-      cardInstitutes3Years: 4,
-      creditScore: 4,
-    },
-    {
-      openAccounts5Years: 7,
-      cardInstitutes1Year: 2,
-      cardInstitutes2Years: 4,
-      cardInstitutes3Years: 5,
-      creditScore: 5,
-    },
-    {
-      openAccounts5Years: 8,
-      cardInstitutes1Year: 3,
-      cardInstitutes2Years: 4,
-      cardInstitutes3Years: 6,
-      creditScore: 6,
-    },
-    {
-      openAccounts5Years: 9,
-      cardInstitutes1Year: 3,
-      cardInstitutes2Years: 5,
-      cardInstitutes3Years: 7,
-      creditScore: 7,
-    },
-    {
-      openAccounts5Years: 10,
-      cardInstitutes1Year: 4,
-      cardInstitutes2Years: 6,
-      cardInstitutes3Years: 8,
-      creditScore: 8,
-    },
-    {
-      openAccounts5Years: 12,
-      cardInstitutes1Year: 4,
-      cardInstitutes2Years: 7,
-      cardInstitutes3Years: 9,
-      creditScore: 9,
-    },
-    {
-      openAccounts5Years: 15,
-      cardInstitutes1Year: 5,
-      cardInstitutes2Years: 8,
-      cardInstitutes3Years: 10,
-      creditScore: 10,
-    },
-    {
-      openAccounts5Years: 1,
-      cardInstitutes1Year: 1,
-      cardInstitutes2Years: 1,
-      cardInstitutes3Years: 1,
-      creditScore: 1,
-    },
-    {
-      openAccounts5Years: 3,
-      cardInstitutes1Year: 1,
-      cardInstitutes2Years: 1,
-      cardInstitutes3Years: 2,
-      creditScore: 2,
-    },
-    {
-      openAccounts5Years: 4,
-      cardInstitutes1Year: 1,
-      cardInstitutes2Years: 2,
-      cardInstitutes3Years: 3,
-      creditScore: 3,
-    },
-    {
-      openAccounts5Years: 5,
-      cardInstitutes1Year: 2,
-      cardInstitutes2Years: 3,
-      cardInstitutes3Years: 3,
-      creditScore: 4,
-    },
-    {
-      openAccounts5Years: 6,
-      cardInstitutes1Year: 2,
-      cardInstitutes2Years: 3,
-      cardInstitutes3Years: 4,
-      creditScore: 5,
-    },
-    {
-      openAccounts5Years: 7,
-      cardInstitutes1Year: 3,
-      cardInstitutes2Years: 4,
-      cardInstitutes3Years: 5,
-      creditScore: 6,
-    },
-    {
-      openAccounts5Years: 8,
-      cardInstitutes1Year: 3,
-      cardInstitutes2Years: 5,
-      cardInstitutes3Years: 6,
-      creditScore: 7,
-    },
-    {
-      openAccounts5Years: 9,
-      cardInstitutes1Year: 4,
-      cardInstitutes2Years: 6,
-      cardInstitutes3Years: 7,
-      creditScore: 8,
-    },
-    {
-      openAccounts5Years: 11,
-      cardInstitutes1Year: 4,
-      cardInstitutes2Years: 7,
-      cardInstitutes3Years: 8,
-      creditScore: 9,
-    },
-  ],
-}) => {
+const ChartContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ErrorText = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: #ff6b6b;
+  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
+  @media screen and (max-width: 500px) {
+    font-size: 1rem;
+  }
+`;
+
+const CreditScoreScatterChart = () => {
+  const [data, setData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
   const darkMode = localStorage.getItem("isDarkMode") === "true";
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await DataVisualization.getCreditScoreScatterChart();
+
+        // API 응답 데이터를 차트 데이터 형식에 맞게 변환
+        const formattedData = response.data.map((item) => ({
+          openAccounts5Years: item.C00000052,
+          cardInstitutes1Year: item.CA1200001,
+          cardInstitutes2Years: item.CA2400001,
+          cardInstitutes3Years: item.CA3600001,
+          creditScore: item.CB,
+        }));
+
+        setData(optimizeData(formattedData));
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("데이터를 불러오는 데 실패했습니다.");
+        setIsLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const optimizeData = (rawData) => {
+    // Method 1: Data Aggregation
+    const aggregatedData = aggregateData(rawData);
+
+    // Choose which method to use
+    return aggregatedData; // or return sampledData;
+  };
+
+  const aggregateData = (rawData) => {
+    const aggregated = {};
+    rawData.forEach((item) => {
+      const key = `${item.openAccounts5Years}-${item.creditScore}`;
+      if (!aggregated[key]) {
+        aggregated[key] = { ...item, count: 0 };
+      }
+      aggregated[key].count++;
+    });
+    return Object.values(aggregated);
+  };
 
   const chartData = {
     datasets: [
@@ -164,6 +97,7 @@ const CreditScoreScatterChart = ({
         data: data.map((item) => ({
           x: item.openAccounts5Years,
           y: item.creditScore,
+          r: item.count ? Math.log(item.count) * 2 + 2 : 2, // Adjust point size based on count
         })),
         backgroundColor: darkMode
           ? "rgba(255, 99, 132, 0.9)"
@@ -174,6 +108,7 @@ const CreditScoreScatterChart = ({
         data: data.map((item) => ({
           x: item.cardInstitutes1Year,
           y: item.creditScore,
+          r: item.count ? Math.log(item.count) * 2 + 2 : 2, // Adjust point size based on count
         })),
         backgroundColor: darkMode
           ? "rgba(54, 162, 235, 0.9)"
@@ -184,6 +119,7 @@ const CreditScoreScatterChart = ({
         data: data.map((item) => ({
           x: item.cardInstitutes2Years,
           y: item.creditScore,
+          r: item.count ? Math.log(item.count) * 2 + 2 : 2, // Adjust point size based on count
         })),
         backgroundColor: darkMode
           ? "rgba(75, 192, 192, 0.9)"
@@ -194,6 +130,7 @@ const CreditScoreScatterChart = ({
         data: data.map((item) => ({
           x: item.cardInstitutes3Years,
           y: item.creditScore,
+          r: item.count ? Math.log(item.count) * 2 + 2 : 2, // Adjust point size based on count
         })),
         backgroundColor: darkMode
           ? "rgba(255, 206, 86, 0.9)"
@@ -253,14 +190,27 @@ const CreditScoreScatterChart = ({
             const label = context.dataset.label || "";
             const xValue = context.parsed.x;
             const yValue = context.parsed.y;
-            return `${label}: (${xValue}, ${yValue}등급)`;
+            const count = context.raw.r
+              ? Math.round(Math.exp((context.raw.r - 2) / 2))
+              : 1;
+            return `${label}: (${xValue}건, ${yValue}등급) 데이터 수: ${count}`;
           },
         },
       },
     },
   };
 
-  return <Scatter data={chartData} options={options} />;
+  if (isLoading) return <Loading />;
+
+  if (error) {
+    return <ErrorText>{error}</ErrorText>;
+  }
+
+  return (
+    <ChartContainer>
+      <Scatter data={chartData} options={options} />
+    </ChartContainer>
+  );
 };
 
 export default CreditScoreScatterChart;

@@ -2,23 +2,33 @@ import styled from "styled-components";
 import { Link, useNavigate } from "react-router-dom";
 import rendingImg from "../../img/background/rendingimg.png";
 import logo from "../../img/background/CreditOnlyLogo.png";
+
 const Contain = styled.div`
   width: 100vw;
   height: 100vh;
 `;
+
 const Header = styled.div`
   width: 100%;
   height: 13%;
   display: flex;
 `;
+
 const Body = styled.div`
   width: 100%;
   height: 87%;
   display: flex;
+  padding: 5%;
+  @media screen and (max-width: 768px) {
+    flex-direction: column;
+  }
 `;
 const LogoDiv = styled.div`
   width: 60%;
   height: 100%;
+  @media screen and (max-width: 500px) {
+    width: 50%;
+  }
 `;
 const Logo = styled.div`
   height: 100%;
@@ -36,7 +46,11 @@ const ListDiv = styled.div`
   justify-content: center;
   align-items: center;
   gap: 0;
+  @media screen and (max-width: 500px) {
+    width: 50%;
+  }
 `;
+
 const ListPage = styled.div`
   width: 50%;
   max-width: 200px;
@@ -47,12 +61,17 @@ const ListPage = styled.div`
   justify-content: center;
   align-items: center;
   font-size: 18px;
-  font-family: Georgia, "Times New Roman", Times, serif;
-  font-weight: ${({ advertisement }) => (advertisement ? "600" : "normal")};
+  font-weight: 600;
   cursor: pointer;
   &:hover {
     font-size: 19px;
     color: rgb(125, 106, 231);
+  }
+  @media screen and (max-width: 500px) {
+    width: 50%;
+  }
+  @media screen and (max-width: 371px) {
+    font-size: 15px;
   }
 `;
 const TextDiv = styled.div`
@@ -61,16 +80,25 @@ const TextDiv = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
+  @media screen and (max-width: 768px) {
+    padding: 5%;
+  }
   & > .firstText {
     width: 100%;
     height: 25%;
     display: flex;
     justify-content: center;
     align-items: center;
+    @media screen and (max-width: 768px) {
+      justify-content: flex-start;
+    }
     & > p {
       font-size: clamp(30px, 5vw, 60px);
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.5; /* Adjusts spacing between lines */
+      @media screen and (max-width: 371px) {
+        font-size: 26px;
+      }
     }
   }
   & > .secondText {
@@ -80,10 +108,16 @@ const TextDiv = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    @media screen and (max-width: 768px) {
+      justify-content: flex-start;
+    }
     & > p {
       font-size: 20px;
       font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
       line-height: 2; /* Adjusts spacing between lines */
+      @media screen and (max-width: 371px) {
+        font-size: 16px;
+      }
     }
   }
 `;
@@ -94,6 +128,11 @@ const StartBtnDiv = styled.div`
   justify-content: flex-start;
   align-items: center;
   margin-left: 17%;
+  @media screen and (max-width: 768px) {
+    height: 30%;
+    justify-content: center;
+    margin-left: 0%;
+  }
 `;
 const StartBtn = styled.div`
   width: 180px;
@@ -119,10 +158,18 @@ const RendingImage = styled.div`
   background-position: center;
   background-repeat: no-repeat;
   background-size: contain;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: 40%;
+  }
 `;
 const BodyDiv = styled.div`
   width: 35%;
   height: 100%;
+  @media screen and (max-width: 768px) {
+    width: 100%;
+    height: 60%;
+  }
 `;
 const StyledLink = styled(Link)`
   text-decoration: none;

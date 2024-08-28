@@ -3,10 +3,12 @@ import { useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
+import { UserEmailContext } from "../../contextapi/UserEmailProvider";
 import CreditGradeRadarChart from "../../chart/CreditGradeRadarChart";
 import ResidentPieChart from "../../chart/ResidentStackedBarChart";
 import CreditScoreScatterChart from "../../chart/CreditScoreScatterChart ";
 import JobDefaultLoanPieChart from "../../chart/JobDefaultLoanPieChart";
+import { useContext } from "react";
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -133,6 +135,10 @@ const BackBtn = styled.div`
 `;
 
 const DataVisualization = () => {
+  const { jobData, residence } = useContext(UserEmailContext);
+  //직업정보 넘겨받음.
+  console.log("jobData:", jobData);
+  console.log("residence:", residence);
   const navigate = useNavigate();
   return (
     <Container>
@@ -151,15 +157,15 @@ const DataVisualization = () => {
           <CreditScoreScatterChart />
         </CreditView>
         <CreditView>
-          <JobDefaultLoanPieChart />
+          <JobDefaultLoanPieChart userJob={jobData} />
         </CreditView>
       </ViewDiv>
       <ViewDiv>
         <CreditBtmView>
-          <CreditGradeRadarChart />
+          <CreditGradeRadarChart userJob={jobData} />
         </CreditBtmView>
         <CreditBtmView>
-          <ResidentPieChart />
+          <ResidentPieChart residence={residence} />
         </CreditBtmView>
       </ViewDiv>
     </Container>

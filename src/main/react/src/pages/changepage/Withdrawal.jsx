@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useState,useContext } from "react";
+import { useState, useContext } from "react";
 import emailjs from "emailjs-com";
 import ImageModal from "../../common/utils/ImageModal";
 import Modal from "../../common/utils/Modal";
@@ -280,7 +280,7 @@ const Withdrawal = () => {
   const [isModalImg, setIsModalImg] = useState(false);
   //탈퇴 성공 변수
   const [isWithdrawal, setIsWithdrawal] = useState(false);
-  const {email} = useContext(UserEmailContext);
+  const { email } = useContext(UserEmailContext);
 
   const closeModal = () => {
     setModalOpen(false);
@@ -293,12 +293,10 @@ const Withdrawal = () => {
       setIdMessage("이메일 형식이 올바르지 않습니다.");
       setIsId(false);
     } else {
-      if(e.target.value === email)
-      {
+      if (e.target.value === email) {
         setIdMessage("올바른 형식입니다.");
         setIsId(true);
-      }
-      else{
+      } else {
         setIdMessage("계정이 일치하지 않습니다.");
         setIsId(false);
       }
@@ -374,10 +372,11 @@ const Withdrawal = () => {
     //DB에서 계정 삭제
     const memberDeleteAxios = async () => {
       const rsp = await MemberAxiosApi.memberDelete(inputEmail);
+      console.log(rsp.data);
       setModalOpen(true);
       setIsModalImg(true);
       SetHeaderContents("회원탈퇴");
-      if (rsp.data === "회원 정보가 삭제되었습니다.") {
+      if (rsp.data === "회원 정보가 성공적으로 삭제되었습니다.") {
         // 모달 처리
         setModalContent("탈퇴되었습니다.");
         setIsWithdrawal(true);
@@ -440,7 +439,7 @@ const Withdrawal = () => {
               className="InputEmail"
               value={inputEmail}
               onChange={onChangeEmail}
-              placeholder="Email Address"
+              placeholder={email}
             />
             <Empty></Empty>
             <EmailAthouized

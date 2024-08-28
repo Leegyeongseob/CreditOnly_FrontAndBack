@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useNavigate } from "react-router-dom";
+import {useNavigate } from "react-router-dom";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
@@ -8,8 +8,8 @@ import CreditGradeBarChart from "../../chart/CreditGradeBarChart";
 import { useEffect, useContext, useState } from "react";
 import CreditScore from "../../img/evaluation/creditScore.png";
 import { UserEmailContext } from "../../contextapi/UserEmailProvider";
-import IsNotCreditEvaluationForm from "./IsNotCreditEvaluationForm";
-import Loading from "./Loading";
+import IsNotCreditEvaluationForm from "../../pages/evaluation/IsNotCreditEvaluationForm";
+import Loading from "../../pages/evaluation/Loading";
 import Modal from "../../pages/help/HelpModal";
 import NotCreditInput from "../../img/evaluation/not-creditInput.gif";
 const Container = styled.div`
@@ -143,7 +143,7 @@ const MyEvaluation = styled.div`
 const CreditText = styled.div`
   width: 100%;
   height: 1vw;
-  font-size: 1vw;
+  font-size: clamp(12px, 1vw, 20px);
   font-weight: 600;
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
   display: flex;
@@ -233,7 +233,7 @@ const Evaluation = () => {
       <ViewDiv>
         {isCreditEvaluation &&
           (isLoading ? (
-            <Loading creditInfo={false}/>
+            <Loading />
           ) : (
             <CreditView>
               <ChartDiv>

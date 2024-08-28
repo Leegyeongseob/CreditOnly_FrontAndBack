@@ -1,8 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState,useContext } from "react";
 import { Doughnut } from "react-chartjs-2";
 import styled from "styled-components";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
-
+import { UserEmailContext } from "../contextapi/UserEmailProvider";
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 const Container = styled.div`
@@ -26,7 +26,10 @@ const rainbowColors = [
   "rgba(0,0,0,0)", // Transparent (10등급)
 ];
 
-const CreditScoreChart = ({ score = 3 }) => {
+const CreditScoreChart = () => {
+  const { creditData } = useContext(UserEmailContext);
+  const score = creditData;
+
   const isDarkMode = localStorage.getItem("isDarkMode") === "true";
 
   const maxValue = 10;

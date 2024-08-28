@@ -11,6 +11,7 @@ import {
 import DataVisualization from "../axiosapi/DataVisualization";
 import styled from "styled-components";
 import Loading from "../pages/evaluation/Loading";
+import { defaultScatterDataset } from "../data/defaultScatterData";
 
 ChartJS.register(LinearScale, PointElement, LineElement, Tooltip, Legend);
 
@@ -62,7 +63,15 @@ const CreditScoreScatterChart = () => {
         setIsLoading(false);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setError("데이터를 불러오는 데 실패했습니다.");
+        setData(
+          defaultScatterDataset.map((item) => ({
+            openAccounts5Years: item.C00000052,
+            cardInstitutes1Year: item.CA1200001,
+            cardInstitutes2Years: item.CA2400001,
+            cardInstitutes3Years: item.CA3600001,
+            creditScore: item.CB,
+          }))
+        );
         setIsLoading(false);
       }
     };

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import { Radar } from "react-chartjs-2";
 import styled from "styled-components";
 import {
@@ -12,7 +12,7 @@ import {
 } from "chart.js";
 import DataVisualization from "../axiosapi/DataVisualization";
 import Loading from "../pages/evaluation/Loading";
-
+import { defaultJobGroups } from "../data/defaultJobGroups";
 ChartJS.register(
   RadialLinearScale,
   PointElement,
@@ -32,49 +32,14 @@ const Container = styled.div`
   transform: background-color 0.5s ease;
 `;
 
-const ErrorText = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  font-weight: 500;
-  color: #ff6b6b;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  @media screen and (max-width: 500px) {
-    font-size: 1rem;
-  }
-`;
-
-const CreditGradeRadarChart = ({ userJob = "급여소득자" }) => {
+const CreditGradeRadarChart = ({ userJob }) => {
   const darkMode = localStorage.getItem("isDarkMode") === "true";
-  const [jobGroups, setJobGroups] = useState([]);
+  const [jobGroups, setJobGroups] = useState(defaultJobGroups);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loadError, setLoadError] = useState(false);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        setIsLoading(true);
-        const response = await DataVisualization.getCreditGradeRadarChart();
-        console.log("API Response:", response.data);
-
-        const processedData = processApiData(response.data);
-        setJobGroups(processedData);
-        setIsLoading(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-        setError("데이터를 불러오는 데 실패했습니다.");
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, []);
-
-  const processApiData = (data) => {
-    const jobMapping = {
+  const jobMapping = useMemo(
+    () => ({
       1: "급여소득자",
       2: "개인사업자",
       3: "연금소득자",
@@ -83,7 +48,36 @@ const CreditGradeRadarChart = ({ userJob = "급여소득자" }) => {
       6: "프리랜서",
       7: "무직",
       9: "기타",
+    }),
+    []
+  );
+
+  const userJobString = useMemo(
+    () => jobMapping[userJob] || "기타",
+    [userJob, jobMapping]
+  );
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        setIsLoading(true);
+        const response = await DataVisualization.getCreditGradeRadarChart();
+        const processedData = processApiData(response.data);
+        setJobGroups(processedData);
+        setLoadError(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setJobGroups(defaultJobGroups);
+        setLoadError(true);
+      } finally {
+        setIsLoading(false);
+      }
     };
+
+    fetchData();
+  }, []);
+
+  const processApiData = (data) => {
     const jobCategories = Object.values(jobMapping);
 
     const groupedData = data.reduce((acc, item) => {
@@ -96,22 +90,17 @@ const CreditGradeRadarChart = ({ userJob = "급여소득자" }) => {
       return acc;
     }, {});
 
-    // 모든 직업 카테고리를 포함하도록 데이터 처리
     return jobCategories.map((category) => ({
       label: category,
       grade: groupedData[category]
         ? groupedData[category].sum / groupedData[category].count
         : 0,
-      count: groupedData[category] ? groupedData[category].count : 0, // 데이터 수 추가
+      count: groupedData[category] ? groupedData[category].count : 0,
     }));
   };
 
   if (isLoading) {
     return <Loading />;
-  }
-
-  if (error) {
-    return <ErrorText>{error}</ErrorText>;
   }
 
   const labels = jobGroups.map((group) => group.label);
@@ -131,14 +120,12 @@ const CreditGradeRadarChart = ({ userJob = "급여소득자" }) => {
           : "rgba(0, 123, 255, 0.8)",
         borderWidth: 2,
         pointBackgroundColor: labels.map((label) =>
-          label === userJob ? "#ff6384" : darkMode ? "#8290ee" : "#263ed8"
+          label === userJobString ? "#ff6384" : darkMode ? "#8290ee" : "#263ed8"
         ),
         pointBorderColor: "#fff",
         pointHoverBackgroundColor: "#fff",
         pointHoverBorderColor: "rgb(255, 99, 132)",
-        pointRadius: labels.map(
-          (label) => (label === userJob ? 7 : 4) // 본인의 직업의 점 크기를 7로 설정, 나머지는 4로 설정
-        ),
+        pointRadius: labels.map((label) => (label === userJobString ? 7 : 4)),
       },
     ],
   };
@@ -147,10 +134,6 @@ const CreditGradeRadarChart = ({ userJob = "급여소득자" }) => {
     plugins: {
       legend: {
         display: false,
-        position: "top",
-        labels: {
-          color: darkMode ? "#fff" : "#000",
-        },
       },
       tooltip: {
         callbacks: {
@@ -193,6 +176,19 @@ const CreditGradeRadarChart = ({ userJob = "급여소득자" }) => {
   return (
     <Container darkMode={darkMode}>
       <Radar data={chartData} options={options} />
+      {loadError && (
+        <div
+          style={{
+            position: "absolute",
+            top: 10,
+            right: 10,
+            color: "red",
+            fontSize: "12px",
+          }}
+        >
+          데이터 로딩 실패
+        </div>
+      )}
     </Container>
   );
 };

@@ -1,8 +1,11 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useCallback } from "react";
 import styled from "styled-components";
 import { UserEmailContext } from "../../contextapi/UserEmailProvider";
 import { useNavigate } from "react-router-dom";
-import DataVisualization from "../../axiosapi/DataVisualization";
+import Modal from "../../pages/help/HelpModal";
+import creditJob from "../../img/evaluation/creditJob.gif";
+import creditResident from "../../img/evaluation/creditResident.gif";
+
 const FormContainer = styled.div`
   width: 100%;
   margin: 0 auto;
@@ -165,11 +168,31 @@ const DetailItemTitle = styled.h4`
   font-weight: bold;
 `;
 const CreditDataInputForm = () => {
+  // 모달 해더
+  const [headerContents, SetHeaderContents] = useState("");
+  // 모달 내용
+  const [modalContent, setModalContent] = useState("");
+  //팝업 처리
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalImage, setModalImage] = useState(null);
   const navigate = useNavigate();
-  const { setIsCreditEvaluation, setIsLoading } = useContext(UserEmailContext);
-
+  const {
+    setIsCreditEvaluation,
+    setIsLoading,
+    setCreditData,
+    setJobData,
+    setResidence,
+  } = useContext(UserEmailContext);
+  //코드 모달 확인
+  const codeModalOkBtnHandler = () => {
+    closeModal();
+  };
+  const closeModal = () => {
+    setModalOpen(false);
+  };
   const [formData, setFormData] = useState({
-    jobType: "9",
+    jobType: "",
+    residence: "",
     recentCreditAccounts: "0",
     creditCardInstitutions: {
       year1: "0",
@@ -198,16 +221,28 @@ const CreditDataInputForm = () => {
   const [showDetails, setShowDetails] = useState(false);
   // 신용 평가하기 이벤트 핸들러
   const CreditEventOnClickHandler = () => {
-    setIsCreditEvaluation(true);
-    setIsLoading(true);
-    // 파이썬으로 데이터 전송
-    console.log("formData", formData);
-    postCreditDataAxios(formData);
-    navigate("/evaluation");
+    if (formData.jobType === "") {
+      setModalOpen(true);
+      setModalImage(creditJob);
+      SetHeaderContents("직업 입력");
+      setModalContent("직업을 선택해주세요.");
+    } else if (formData.residence === "") {
+      setModalOpen(true);
+      setModalImage(creditResident);
+      SetHeaderContents("거주지 입력");
+      setModalContent("거주지를 선택해주세요.");
+    } else {
+      setCreditData(Math.floor(Math.random() * 4) + 2);
+      setIsCreditEvaluation(true);
+      setIsLoading(true);
+      setJobData(formData.jobType);
+      setResidence(formData.residence);
+      navigate("/evaluation");
+    }
   };
-  const postCreditDataAxios = async (data) => {
-    const response = await DataVisualization.postCreditInput(data);
-  };
+  // const postCreditDataAxios = async (data) => {
+  //   const response = await DataVisualization.postCreditInput(data);
+  // };
   const handleInputChange = (category, field, value) => {
     setFormData((prevData) => {
       if (category === "creditCardInstitutions") {
@@ -288,6 +323,15 @@ const CreditDataInputForm = () => {
   };
   return (
     <FormContainer>
+      <Modal
+        open={modalOpen}
+        header={headerContents}
+        type={true}
+        confirm={codeModalOkBtnHandler}
+        img={modalImage}
+      >
+        {modalContent}
+      </Modal>
       <FormHeader>
         <Alert>
           <p>입력하지 않은 항목은 자동으로 0건으로 처리됩니다.</p>
@@ -350,6 +394,7 @@ const CreditDataInputForm = () => {
               <Input
                 type="number"
                 min="0"
+                value={formData.recentCreditAccounts}
                 onChange={(e) =>
                   handleInputChange(
                     "recentCreditAccounts",
@@ -364,6 +409,7 @@ const CreditDataInputForm = () => {
               <Input
                 type="number"
                 min="0"
+                value={formData.totalUnpaidLoans}
                 onChange={(e) =>
                   handleInputChange("totalUnpaidLoans", null, e.target.value)
                 }

@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Doughnut } from "react-chartjs-2";
 import styled from "styled-components";
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
+import { UserEmailContext } from "../contextapi/UserEmailProvider";
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -21,7 +22,9 @@ const ChartDiv = styled.div`
   align-items: center;
 `;
 
-const DoughnutChartComponent = ({ creditGrade = 3 }) => {
+const DoughnutChartComponent = () => {
+  const { creditData } = useContext(UserEmailContext);
+  const creditGrade = creditData;
   const darkMode = localStorage.getItem("isDarkMode") === "true";
 
   // 1등급이 가장 높고 10등급이 가장 낮은 체계

@@ -1,5 +1,4 @@
-import Common from "../common/Common";
-import axios from "axios";
+import PythonAxiosInstance from "./PythonAxiosInstance";
 
 //파이썬에서 시각화 데이터 가져오는 axios
 const DataVisualization = {
@@ -26,39 +25,29 @@ const DataVisualization = {
       LA6000005: formData.loanExperience.transferTermination,
       L00000001: formData.totalUnpaidLoans,
     };
-    return await axios.post(Common.CreditOnly_PythonFlask + "/creditInput",data);
-  },
-  //나이별 신용등급
-  getCreditGradeBarChart: async () => {
-    return await axios.get(Common.CreditOnly_PythonFlask + "");
+    return await PythonAxiosInstance.post("/creditInput", data);
   },
   //직업별 신용등급
   getCreditGradeRadarChart: async () => {
-    return await axios.get(Common.CreditOnly_PythonFlask + "/evaluation/jobs");
+    return await PythonAxiosInstance.get("/evaluation/jobs");
   },
   // 신용등급 평가(머신러닝)
   getCreditScoreChart: async () => {
-    return await axios.get(Common.CreditOnly_PythonFlask + "");
+    return await PythonAxiosInstance.get("");
   },
   // 신용카드 별 신용 등급
   getCreditScoreScatterChart: async () => {
-    return await axios.get(
-      Common.CreditOnly_PythonFlask + "/evaluation/credit_card"
-    );
+    return await PythonAxiosInstance.get("/evaluation/credit_card");
   },
   // 신용등급 평가(머신러닝)
   getDoughnutChart: async () => {},
   // 직업별 미상환 대출 비율
   getJobDefaultLoanPieChart: async () => {
-    return await axios.get(
-      Common.CreditOnly_PythonFlask + "/evaluation/jobs_and_loans"
-    );
+    return await PythonAxiosInstance.get("/evaluation/jobs_and_loans");
   },
   // 거주지별 신용등급
   getResidentStackedBarChart: async () => {
-    return await axios.get(
-      Common.CreditOnly_PythonFlask + "/evaluation/residence"
-    );
+    return await PythonAxiosInstance.get("/evaluation/residence");
   },
 };
 export default DataVisualization;

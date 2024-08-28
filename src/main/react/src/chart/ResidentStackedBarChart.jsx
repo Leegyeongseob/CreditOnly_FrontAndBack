@@ -13,6 +13,8 @@ import {
 } from "chart.js";
 import DataVisualization from "../axiosapi/DataVisualization";
 import Loading from "../pages/evaluation/Loading";
+import { defaultResidentData } from "../data/defaultResidentData";
+
 ChartJS.register(
   BarController,
   BarElement,
@@ -38,26 +40,12 @@ const ChartDiv = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const ErrorText = styled.div`
-  width: 100;
-  height: 100;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-size: 1.5rem;
-  color: #ff6b6b;
-  font-weight: 500;
-  font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
-  @media screen and (max-width: 500px) {
-    font-size: 1rem;
-  }
-`;
-const ResidentStackedBarChart = () => {
+
+const ResidentStackedBarChart = ({ residence }) => {
   const darkMode = localStorage.getItem("isDarkMode") === "true";
-  //파이썬에서 데이터 가져오는 비동기 함수
   const [creditGrades, setCreditGrades] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
+  const [loadError, setLoadError] = useState(false);
 
   const labels = useMemo(
     () => [
@@ -109,6 +97,14 @@ const ResidentStackedBarChart = () => {
     []
   );
 
+  const isResidenceMatch = useCallback(
+    (label) => {
+      if (!label) return false;
+      return label.includes(residence) || residence.includes(label);
+    },
+    [residence]
+  );
+
   const processData = useCallback(
     (data) => {
       const gradeSum = new Array(labels.length).fill(0);
@@ -128,9 +124,12 @@ const ResidentStackedBarChart = () => {
       });
 
       const averageGrades = gradeSum.map((sum, index) =>
-        gradeCount[index] > 0 ? (sum / gradeCount[index]).toFixed(1) : 0
+        gradeCount[index] > 0
+          ? parseFloat((sum / gradeCount[index]).toFixed(1))
+          : 0
       );
 
+      console.log("Processed Data:", averageGrades);
       return averageGrades;
     },
     [labels]
@@ -141,12 +140,15 @@ const ResidentStackedBarChart = () => {
       try {
         setIsLoading(true);
         const response = await DataVisualization.getResidentStackedBarChart();
+        console.log("API Response:", response.data);
         const processedData = processData(response.data);
         setCreditGrades(processedData);
-        setIsLoading(false);
+        setLoadError(false);
       } catch (err) {
         console.error("Error fetching data:", err);
-        setError("데이터를 불러오는 데 실패했습니다.");
+        setCreditGrades(defaultResidentData);
+        setLoadError(true);
+      } finally {
         setIsLoading(false);
       }
     };
@@ -154,91 +156,132 @@ const ResidentStackedBarChart = () => {
     fetchData();
   }, [processData]);
 
-  // 스택형 막대 그래프의 데이터셋 생성
+  const chartData = useMemo(() => {
+    console.log("Chart Data - Labels:", labels);
+    console.log("Chart Data - Credit Grades:", creditGrades);
+    return {
+      labels: labels,
+      datasets: [
+        {
+          label: "신용등급",
+          data: creditGrades,
+          backgroundColor: labels.map((label) =>
+            isResidenceMatch(label)
+              ? darkMode
+                ? "rgba(255, 255, 0, 0.8)"
+                : "rgba(255, 0, 0, 0.8)"
+              : `${colors[labels.indexOf(label)]}99`
+          ),
+          borderColor: labels.map((label) =>
+            isResidenceMatch(label)
+              ? darkMode
+                ? "rgba(255, 255, 0, 1)"
+                : "rgba(255, 0, 0, 1)"
+              : colors[labels.indexOf(label)]
+          ),
+          borderWidth: 1,
+        },
+      ],
+    };
+  }, [labels, colors, creditGrades, darkMode, isResidenceMatch]);
 
-  const chartData = {
-    labels: labels,
-    datasets: [
-      {
-        label: "신용등급",
-        data: creditGrades,
-        backgroundColor: colors.map((color) => `${color}99`),
-        borderColor: colors,
-        borderWidth: 1,
-      },
-    ],
-  };
-
-  // 차트 옵션
-  const options = {
-    plugins: {
-      legend: {
-        display: false,
-      },
-      tooltip: {
-        callbacks: {
-          label: function (tooltipItem) {
-            const value = tooltipItem.raw;
-            if (typeof value === "number" && !isNaN(value)) {
-              return `신용등급: ${value.toFixed(1)}`;
-            } else {
-              return `신용등급: ${value}`;
-            }
+  const options = useMemo(
+    () => ({
+      responsive: true,
+      plugins: {
+        legend: {
+          display: false,
+        },
+        tooltip: {
+          callbacks: {
+            label: function (context) {
+              const label = context.label || "";
+              const value = context.raw;
+              console.log("Tooltip - Label:", label, "Value:", value);
+              return `${label}: ${
+                typeof value === "number" ? value.toFixed(1) : value
+              }`;
+            },
           },
         },
       },
-    },
-    scales: {
-      x: {
-        title: {
-          display: true,
-          text: "거주지",
-          color: darkMode ? "white" : "black",
-        },
-        ticks: {
-          color: darkMode ? "white" : "black",
-        },
-        grid: {
-          color: darkMode ? "darkgray" : "rgba(0, 0, 0, 0.1)",
-        },
-      },
-      y: {
-        beginAtZero: true,
-        max: 10,
-        title: {
-          display: true,
-          text: "신용등급평균",
-          color: darkMode ? "white" : "black",
-        },
-        ticks: {
-          color: darkMode ? "white" : "black",
-          stepSize: 1,
-          callback: function (value) {
-            return value.toFixed(1);
+      scales: {
+        x: {
+          title: {
+            display: true,
+            text: "거주지",
+            color: darkMode ? "white" : "black",
+          },
+          ticks: {
+            color: (context) => {
+              const label = context.tick && context.tick.label;
+              if (!label) {
+                console.log("Undefined label in x-axis tick");
+                return darkMode ? "white" : "black";
+              }
+              return isResidenceMatch(label)
+                ? darkMode
+                  ? "#515fdd"
+                  : "#079431"
+                : darkMode
+                ? "white"
+                : "black";
+            },
+            font: (context) => {
+              const label = context.tick && context.tick.label;
+              return {
+                weight: label && isResidenceMatch(label) ? "bold" : "normal",
+              };
+            },
+          },
+          grid: {
+            color: darkMode ? "darkgray" : "rgba(0, 0, 0, 0.1)",
           },
         },
-        grid: {
-          color: darkMode ? "darkgray" : "rgba(0, 0, 0, 0.1)",
+        y: {
+          beginAtZero: true,
+          max: 10,
+          title: {
+            display: true,
+            text: "신용등급평균",
+            color: darkMode ? "white" : "black",
+          },
+          ticks: {
+            color: darkMode ? "white" : "black",
+            stepSize: 1,
+            callback: function (value) {
+              return value.toFixed(1);
+            },
+          },
+          grid: {
+            color: darkMode ? "darkgray" : "rgba(0, 0, 0, 0.1)",
+          },
         },
       },
-    },
-    elements: {
-      bar: {
-        borderWidth: 1,
-      },
-    },
-    layout: {
-      padding: 20,
-    },
-  };
+    }),
+    [darkMode, isResidenceMatch]
+  );
 
   if (isLoading) return <Loading />;
-  if (error) return <ErrorText>{error}</ErrorText>;
+
   return (
     <Container>
       <ChartDiv>
         <Bar data={chartData} options={options} />
       </ChartDiv>
+      {loadError && (
+        <div
+          style={{
+            position: "absolute",
+            top: 10,
+            right: 10,
+            color: "red",
+            fontSize: "12px",
+          }}
+        >
+          데이터 로딩 실패
+        </div>
+      )}
     </Container>
   );
 };

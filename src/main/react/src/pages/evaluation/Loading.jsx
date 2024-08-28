@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Oval } from "react-loader-spinner";
 import creditLoading from "../../img/Loading/creditLoading.gif";
 // CreditView 컴포넌트
 const CreditView = styled.div`

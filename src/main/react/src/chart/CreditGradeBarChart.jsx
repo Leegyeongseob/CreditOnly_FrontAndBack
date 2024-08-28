@@ -156,7 +156,7 @@ const CreditGradeBarChart = ({ ageGroups = sampleAgeGroups }) => {
   };
   return (
     <Container darkMode={darkMode}>
-        <Bar data={chartData} options={options} />
+      <Bar data={chartData} options={options} />
     </Container>
   );
 };

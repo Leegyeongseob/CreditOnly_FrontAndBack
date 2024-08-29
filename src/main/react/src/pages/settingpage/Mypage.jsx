@@ -21,7 +21,7 @@ import {
   ConversationItem,
   DeleteButton,
 } from "../help/ChatBotSideBarStyles"; // 스타일 파일을 가져옴
-
+import { useNavigate } from "react-router-dom";
 const Container = styled.div`
   width: 100%;
   height: 100%;
@@ -400,17 +400,17 @@ const ViewContents = styled.div`
   overflow-y: auto;
 `;
 
-const Mypage = () => {
+const Mypage = ({ isDarkMode }) => {
   const { email, imgUrl, setImgUrl, isCreditEvaluation } =
     useContext(UserEmailContext);
   const { conversations, deleteConversation, setCurrentConversation } =
     useChatContext();
-
+  const [isCardSelected, setIsCardSelected] = useState(true); // 카드 선택 상태 추가
   const [name, setName] = useState("");
   const [birthDate, setBirthDate] = useState("");
   const [joinDate, setJoinDate] = useState("");
   const [imgData, setImgData] = useState("");
-
+  const navigator = useNavigate();
   const userProfileAxios = useCallback(
     async (emailData) => {
       const res = await MemberAxiosApi.searchProfileUrl(emailData);
@@ -481,7 +481,15 @@ const Mypage = () => {
 
   const handleConversationClick = (conv) => {
     setCurrentConversation(conv);
+    setIsCardSelected(false);
+    navigator("/chat");
     // 필요하다면 여기에 추가적인 로직을 넣을 수 있습니다.
+  };
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return `대화 ${date.getFullYear()}.${
+      date.getMonth() + 1
+    }.${date.getDate()}. 오후 ${date.getHours()}:${date.getMinutes()}`;
   };
   return (
     <Container>
@@ -546,13 +554,14 @@ const Mypage = () => {
             <ViewLink to="/chat">이동</ViewLink>
           </ViewTitle>
           <ViewContents>
-            <ConversationList>
+            <ConversationList isCardSelected={isCardSelected}>
               {conversations.map((conv) => (
                 <ConversationItem
+                  isDarkMode={isDarkMode}
                   key={conv.id}
                   onClick={() => handleConversationClick(conv)}
                 >
-                  대화 {new Date(conv.id).toLocaleString()}
+                  {formatDate(conv.id)}
                   <DeleteButton
                     onClick={(e) => {
                       e.stopPropagation();

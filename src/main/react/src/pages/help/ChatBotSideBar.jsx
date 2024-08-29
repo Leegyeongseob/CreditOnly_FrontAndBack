@@ -1,10 +1,6 @@
+import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  FaTrashAlt,
-  FaExternalLinkAlt,
-  FaArrowLeft,
-  FaPlus,
-} from "react-icons/fa";
+import { FaTrashAlt, FaArrowLeft, FaPlus } from "react-icons/fa";
 import { GoPerson } from "react-icons/go";
 import { MdLogout } from "react-icons/md";
 import { useChatContext } from "../../contexts/ChatContext";
@@ -22,54 +18,53 @@ import {
   Overlay,
 } from "./ChatBotSideBarStyles";
 
-const ChatBotSideBar = ({ onNewChat, toggleSideBar, isOpen, isDarkMode }) => {
+const ChatBotSideBar = ({
+  isOpen,
+  toggleSideBar,
+  onNewChat,
+  isCardSelected,
+  isDarkMode,
+}) => {
   const navigate = useNavigate();
   const { conversations, deleteConversation, setCurrentConversation } =
     useChatContext();
 
-  const goSetting = () => {
-    toggleSideBar();
-    navigate("/setting");
-  };
-
-  const goBack = () => {
-    toggleSideBar();
-    navigate(-1);
-  };
-
-  const logOutBtnHandler = () => {
-    localStorage.removeItem("accessToken");
-    localStorage.removeItem("refreshToken");
-    toggleSideBar();
-    navigate("/");
-  };
-
   const handleConversationClick = (conv) => {
     setCurrentConversation(conv);
-    toggleSideBar();
+    if (window.innerWidth <= 768) {
+      toggleSideBar();
+    }
+  };
+
+  const formatDate = (timestamp) => {
+    const date = new Date(timestamp);
+    return `대화 ${date.getFullYear()}.${
+      date.getMonth() + 1
+    }.${date.getDate()}. 오후 ${date.getHours()}:${date.getMinutes()}`;
   };
 
   return (
     <>
       <Overlay isOpen={isOpen} onClick={toggleSideBar} />
-      <Sidebar isOpen={isOpen}>
+      <Sidebar isOpen={isOpen} isDarkMode={isDarkMode}>
+        <Back onClick={() => navigate(-1)}>
+          <FaArrowLeft size={20} />
+        </Back>
         <Menu>
-          <Back>
-            <FaArrowLeft onClick={goBack} size={20} />
-          </Back>
           <NewChatBox>
             <NewChatBtn onClick={onNewChat}>
               새 채팅
               <FaPlus size={14} />
             </NewChatBtn>
           </NewChatBox>
-          <ConversationList>
+          <ConversationList isCardSelected={isCardSelected}>
             {conversations.map((conv) => (
               <ConversationItem
+                isDarkMode={isDarkMode}
                 key={conv.id}
                 onClick={() => handleConversationClick(conv)}
               >
-                대화 {new Date(conv.id).toLocaleString()}
+                {formatDate(conv.id)}
                 <DeleteButton
                   onClick={(e) => {
                     e.stopPropagation();
@@ -82,19 +77,27 @@ const ChatBotSideBar = ({ onNewChat, toggleSideBar, isOpen, isDarkMode }) => {
             ))}
           </ConversationList>
           <SettingBox>
-            <SetDetail onClick={goSetting}>
+            <SetDetail
+              isDarkMode={isDarkMode}
+              onClick={() => navigate("/setting")}
+            >
               <GoPerson />
               계정관리
             </SetDetail>
             <SetDetail
-              onClick={() => {
-                navigate("/help");
-              }}
+              isDarkMode={isDarkMode}
+              onClick={() => navigate("/help")}
             >
-              <FaExternalLinkAlt />
               FAQ
             </SetDetail>
-            <SetDetail onClick={logOutBtnHandler}>
+            <SetDetail
+              isDarkMode={isDarkMode}
+              onClick={() => {
+                localStorage.removeItem("accessToken");
+                localStorage.removeItem("refreshToken");
+                navigate("/");
+              }}
+            >
               <MdLogout />
               로그아웃
             </SetDetail>

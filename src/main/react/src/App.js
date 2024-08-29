@@ -109,7 +109,7 @@ const App = () => {
                   path="/setting"
                   element={
                     <ChatProvider>
-                      <Mypage />
+                      <Mypage isDarkMode={isDarkMode} />
                     </ChatProvider>
                   }
                 />

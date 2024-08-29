@@ -38,7 +38,7 @@ const dots = keyframes`
 
 export const Contain = styled.div`
   width: 100%;
-  height: 100vh;
+  height: 100%;
   display: flex;
   flex-direction: column;
 `;
@@ -68,6 +68,8 @@ export const MessageBox = styled.div`
   padding: 20px;
   overflow-y: auto;
   height: calc(100vh - 6vh);
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.commponent : theme.commponent};
 
   @media screen and (max-width: 768px) {
     width: 100%;
@@ -95,8 +97,7 @@ export const MessageSendBox = styled.div`
   background-color: ${({ theme, isDarkMode }) =>
     isDarkMode ? theme.darkBackground : theme.lightBackground};
   border-top: 1px solid
-    ${({ theme, isDarkMode }) =>
-      isDarkMode ? theme.darkBorder : theme.lightBorder};
+    ${({ theme, isDarkMode }) => (isDarkMode ? theme.color : theme.color)};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -112,11 +113,9 @@ export const MessageSendBox = styled.div`
 export const MessageSendWrap = styled.div`
   width: 100%;
   max-width: 800px;
-  background-color: ${({ theme, isDarkMode }) =>
-    isDarkMode ? theme.darkInputBackground : theme.lightInputBackground};
+  background-color: #ffffffd0;
   border: 1px solid
-    ${({ theme, isDarkMode }) =>
-      isDarkMode ? theme.darkBorder : theme.lightBorder};
+    ${({ theme, isDarkMode }) => (isDarkMode ? theme.goodBlue : "#000")};
   transition: background-color 0.5s ease, border 0.5s ease;
   border-radius: 20px;
   display: flex;
@@ -139,7 +138,9 @@ export const MessageSend = styled.input`
   color: ${({ theme, isDarkMode }) =>
     isDarkMode ? theme.lightText : theme.darkText};
   outline: none;
-
+  &::placeholder {
+    color: #4545b8;
+  }
   @media screen and (max-width: 768px) {
     font-size: 14px;
   }
@@ -162,33 +163,23 @@ export const MessageBubble = styled.div`
   padding: 12px 18px;
   margin: 10px 0;
   border-radius: 20px;
-  background: ${(props) =>
-    props.sender === "user"
-      ? "linear-gradient(135deg, #007bff, #0056b3)"
-      : props.isDarkMode
-      ? props.theme.darkBotBubble
-      : props.theme.lightBotBubble};
-  color: ${(props) =>
-    props.sender === "user"
-      ? "white"
-      : props.isDarkMode
-      ? props.theme.lightText
-      : props.theme.darkText};
+  background-color: ${({ theme, isDarkMode }) =>
+    isDarkMode ? theme.background : theme.background};
+  color: ${({ theme, isDarkMode }) => (isDarkMode ? theme.color : theme.color)};
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   align-self: ${(props) =>
     props.sender === "user" ? "flex-end" : "flex-start"};
   font-size: 16px;
   line-height: 1.4;
   word-wrap: break-word;
-  white-space: pre-wrap;
+  white-space: pre-line;
   animation: ${fadeIn} 0.5s ease forwards;
-
+  text-align: left;
   @media screen and (max-width: 768px) {
     max-width: 85%;
     font-size: 14px;
   }
 `;
-
 export const LoadingIndicator = styled.div`
   text-align: center;
   padding: 10px;

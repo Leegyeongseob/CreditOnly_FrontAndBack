@@ -85,7 +85,7 @@ const TextDiv = styled.div`
   }
   & > .firstText {
     width: 100%;
-    height: 25%;
+    height: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -93,7 +93,7 @@ const TextDiv = styled.div`
       justify-content: flex-start;
     }
     & > p {
-      font-size: clamp(30px, 5vw, 60px);
+      font-size: clamp(30px, 4vw, 50px);
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       line-height: 1.5; /* Adjusts spacing between lines */
       @media screen and (max-width: 371px) {
@@ -104,7 +104,7 @@ const TextDiv = styled.div`
   & > .secondText {
     width: 100%;
     font-size: 10px;
-    height: 25%;
+    height: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -112,7 +112,7 @@ const TextDiv = styled.div`
       justify-content: flex-start;
     }
     & > p {
-      font-size: 20px;
+      font-size: clamp(15px, 3vw, 20px);
       font-family: Impact, Haettenschweiler, "Arial Narrow Bold", sans-serif;
       line-height: 2; /* Adjusts spacing between lines */
       @media screen and (max-width: 371px) {

@@ -20,7 +20,7 @@ import Evaluation from "./pages/evaluation/Evaluation";
 import Announcement from "./pages/announcement/AnnouncementMain";
 import ChatBot from "./pages/help/ChatBot";
 import ResetPassword from "./pages/login/ResetPassword";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ThemeProvider } from "styled-components";
 import UserEmailProvider from "./contextapi/UserEmailProvider";
 import AboutUs from "./pages/aboutUs/AboutUs";
@@ -73,6 +73,7 @@ const App = () => {
   const storedTheme = localStorage.getItem("isDarkMode");
   const initialTheme = storedTheme === "true" ? true : false;
   const [isDarkMode, setIsDarkMode] = useState(initialTheme);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 1024);
 
   // 테마 변경 함수
   const toggleDarkMode = () => {
@@ -80,6 +81,17 @@ const App = () => {
     setIsDarkMode(newTheme);
     localStorage.setItem("isDarkMode", newTheme); // 로컬 스토리지에 저장
   };
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 1024);
+    };
+
+    // 화면 크기 변경 시 이벤트 감지
+    window.addEventListener("resize", handleResize);
+
+    // 컴포넌트 언마운트 시 이벤트 리스너 제거
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   // Kakao SDK 초기화
   if (!window.Kakao.isInitialized()) {
@@ -94,8 +106,14 @@ const App = () => {
         <UserEmailProvider>
           <Router>
             <Routes>
-              <Route path="/" element={<RendingPage />} />
               <Route path="/error" element={<ErrorPage />} />
+              {isMobile ? (
+              <Route path="/" element={<LoginPage />} />
+            ) : (
+              <>
+                <Route path="/" element={<RendingPage />} />
+                <Route path="/login" element={<LoginPage />} />
+                </>)}
               <Route
                 element={
                   <MainForm
@@ -141,7 +159,6 @@ const App = () => {
                   element={<AnBoardDetails />}
                 />
               </Route>
-              <Route path="/login" element={<LoginPage />} />
               <Route path="/signup" element={<SignUp />} />
               <Route
                 path="/chat"
